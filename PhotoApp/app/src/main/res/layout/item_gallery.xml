@@ -16,6 +16,7 @@
             android:background="@drawable/gallery_color_selector"
             android:clickable="true"
             android:translationZ="1dp"
+            android:id="@+id/rlImage"
             >
 
         </RelativeLayout>

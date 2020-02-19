@@ -127,7 +127,7 @@ public class GalleryFragment extends Fragment {
         folder.mkdirs();
         arrPath = getImagesPath(folder) ;
         recyclerViewGallery.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        galleryAdapter = new GalleryAdapter(getContext(),arrPath) ;
+        galleryAdapter = new GalleryAdapter(getContext(),arrPath,this) ;
         galleryAdapter.notifyDataSetChanged();
         recyclerViewGallery.setAdapter(galleryAdapter);
     }
@@ -135,7 +135,7 @@ public class GalleryFragment extends Fragment {
     public void NumberChanged(){
         if (NumberAdapter.checkedNumber != -1) {
             arrPath = getImagesPathByNumber(NumberAdapter.checkedNumber);
-            galleryAdapter = new GalleryAdapter(getContext(), arrPath);
+            galleryAdapter = new GalleryAdapter(getContext(), arrPath,this);
             galleryAdapter.notifyDataSetChanged();
             recyclerViewGallery.setAdapter(galleryAdapter);
         }else {
@@ -143,7 +143,7 @@ public class GalleryFragment extends Fragment {
             File folder = new File(root + "/" + Config.ROOT_FOLDER);
             folder.mkdirs();
             arrPath = getImagesPath(folder);
-            galleryAdapter = new GalleryAdapter(getContext(), arrPath);
+            galleryAdapter = new GalleryAdapter(getContext(), arrPath,this);
             galleryAdapter.notifyDataSetChanged();
             recyclerViewGallery.setAdapter(galleryAdapter);
         }
