@@ -58,5 +58,27 @@ public class BitmapOperation
         return bmp;
     }
 
+    public static Bitmap toBlackWhite(Bitmap bmpOriginal){
+        int width, height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();
 
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas c = new Canvas(bmp);
+        Paint paint = new Paint();
+
+
+        int percentage = 85 ; //default = 85
+        ColorMatrix cm = new ColorMatrix(new ColorMatrix(new float[]{
+                percentage,percentage,percentage, 0, -128*255,
+                percentage,percentage,percentage, 0, -128*255,
+                percentage,percentage,percentage, 0, -128*255,
+                0, 0, 0, 1, 0 }
+                ) ) ;
+
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        return bmp;
+    }
 }
