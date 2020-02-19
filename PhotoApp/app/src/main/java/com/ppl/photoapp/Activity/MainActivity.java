@@ -1,7 +1,9 @@
-package com.ppl.photoapp;
+package com.ppl.photoapp.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.ppl.photoapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
