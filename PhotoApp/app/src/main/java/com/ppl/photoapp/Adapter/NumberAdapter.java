@@ -58,8 +58,8 @@ public class NumberAdapter extends RecyclerView.Adapter<NumberAdapter.MyHolder>
             @Override
             public void onClick(View v) {
                 checkedNumber = number[i] ;
-//                galleryFragment.UpdateRecylerViewNumber();
-//                galleryFragment.NumberChanged();
+                galleryFragment.UpdateRecylerViewNumber();
+                galleryFragment.NumberChanged();
             }
         });
 
