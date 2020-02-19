@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Photo App</string>
     <string name="strTakePicture">Take Picture</string>
+    <string name="numOne">One</string>
+    <string name="numTwo">Two</string>
+    <string name="numThree">Three</string>
+    <string name="numFour">Four</string>
+    <string name="numFive">Five</string>
+    <string name="numSix">Six</string>
+    <string name="numSeven">Seven</string>
+    <string name="numEight">Eight</string>
+    <string name="numNine">Nine</string>
+    <string name="numZero">Zero</string>
+    <string name="numAll">All</string>
+
 </resources>
