@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ppl.photoapp.Bitmap.BitmapOperation;
+import com.ppl.photoapp.GlobalVariable.Global;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.FileNotFoundException;
@@ -74,8 +76,10 @@ public class ResultActivity extends AppCompatActivity {
             try
             {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver() , imageUri);
+                bitmap = BitmapOperation.toGrayscale(bitmap) ;
                 ImageView imageView = findViewById(R.id.imageView) ;
                 imageView.setImageBitmap(bitmap);
+                Global.bitmap = bitmap ;
             }
             catch (Exception e)
             {
