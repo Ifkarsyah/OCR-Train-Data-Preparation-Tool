@@ -1,6 +1,7 @@
 package com.ppl.photoapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.ppl.photoapp.Config.Config;
 import com.ppl.photoapp.Fragment.CameraFragment;
 import com.ppl.photoapp.Fragment.GalleryFragment;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -33,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction() ;
         ft.replace(R.id.content,fragment,"") ;
         ft.commit() ;
+
+        SetSharedPreferences() ;
+    }
+
+    void SetSharedPreferences(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.PREF_GALLERY, 0) ;
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(Config.KEY_GALLERY_NUMBER,-1) ;
+        editor.commit() ;
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
