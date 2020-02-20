@@ -6,14 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ppl.photoapp.GlobalVariable.Global;
-import com.ppl.photoapp.Model.LabeledBitmap;
+import com.ppl.photoapp.Model.LabeledBitmapArray;
 import com.ppl.photoapp.OpenCV.OpenCV;
 
 import java.util.ArrayList;
 
 public class SplitingActivity extends AppCompatActivity {
 
-    ArrayList<LabeledBitmap> arrLabeledBitmap;
+    ArrayList<LabeledBitmapArray> arrLabeledBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

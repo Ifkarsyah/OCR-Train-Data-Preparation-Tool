@@ -2,7 +2,7 @@ package com.ppl.photoapp.OpenCV;
 
 import android.graphics.Bitmap;
 
-import com.ppl.photoapp.Model.LabeledBitmap;
+import com.ppl.photoapp.Model.LabeledBitmapArray;
 
 import java.util.ArrayList;
 
@@ -19,18 +19,16 @@ public class OpenCV
         return arrBitmap ;
     }
 
-    public static ArrayList<LabeledBitmap> mappingBitmap(ArrayList<Bitmap> arrBitmap){
-        ArrayList<LabeledBitmap> arrLabeledBitmap = new ArrayList<>() ;
+    public static ArrayList<LabeledBitmapArray> mappingBitmap(ArrayList<Bitmap> arrBitmap){
+        ArrayList<LabeledBitmapArray> arrLabeledBitmap = new ArrayList<>() ;
 
         //Dummy
-        int acc = 0 ;
-        int label = 0 ;
-        for(int i = 0 ; i < arrBitmap.size() ; i ++ ){
-            arrLabeledBitmap.add(new LabeledBitmap(arrBitmap.get(i),label) );
-            acc ++ ;
-            if (acc % 4 == 0){
-                label ++ ;
+        for(int i = 0 ; i < arrBitmap.size()/4 ; i ++ ){
+            Bitmap[] bitmaps = new Bitmap[4] ;
+            for(int j = 0 ; j < bitmaps.length ; j ++ ){
+                bitmaps[j] = arrBitmap.get(i*4 + j) ;
             }
+            arrLabeledBitmap.add(new LabeledBitmapArray(bitmaps,i) );
         }
         return arrLabeledBitmap ;
     }
