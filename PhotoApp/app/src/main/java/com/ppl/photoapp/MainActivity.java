@@ -13,6 +13,8 @@ import com.ppl.photoapp.Fragment.GalleryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Mark Feature See Gallery-2
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigationView = findViewById(R.id.navigation) ;
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
-
+        
+        CameraFragment fragment = new CameraFragment() ;
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction() ;
+        ft.replace(R.id.content,fragment,"") ;
+        ft.commit() ;
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
