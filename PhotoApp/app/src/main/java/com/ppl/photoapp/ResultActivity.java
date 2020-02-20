@@ -32,8 +32,7 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getSupportActionBar().setTitle("Result Image");
-
+        getSupportActionBar().setTitle("Result");
         OpenCameraOrGallery() ;
         ButtonTakeAnotherPicture() ;
         ButtonApply() ;
