@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.ppl.photoapp.Bitmap.BitmapOperation;
 import com.ppl.photoapp.Fragment.GalleryFragment;
 import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.LookImageActivity;
@@ -47,8 +49,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyHolder
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
         final String path = arrPath.get(i) ;
         File imgFile = new File(path);
-        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-        myHolder.ivImage.setImageBitmap(myBitmap);
+        myHolder.ivImage.setImageURI(Uri.fromFile(imgFile));
 
         myHolder.rlImage.setOnClickListener(new View.OnClickListener() {
             @Override
