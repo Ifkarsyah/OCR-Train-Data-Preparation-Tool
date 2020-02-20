@@ -174,17 +174,40 @@ public class GalleryFragment extends Fragment {
     public ArrayList<String> getImagesPath(File dir) {
         ArrayList<String> fileList = new ArrayList<>() ;
         File listFile[] = dir.listFiles();
-        if (listFile != null && listFile.length > 0) {
-            for (File file : listFile) {
-                String path = file.toString() ;
-                String extentsionFile = path.substring(path.lastIndexOf("."));
-                if (FormatNameFile.isAvaiableExtension(extentsionFile))
-                {
-                    fileList.add(path);
+        ArrayList<File> fileArrayList = mapDirFiles(listFile) ;
+
+        if (fileArrayList != null && fileArrayList.size() > 0) {
+            for (File file : fileArrayList) {
+                try {
+                    String path = file.toString() ;
+                    String extentsionFile = path.substring(path.lastIndexOf("."));
+                    if (FormatNameFile.isAvaiableExtension(extentsionFile))
+                    {
+                        fileList.add(path);
+                    }
+                }catch (Exception e){
+
                 }
+
             }
         }
         return fileList;
+    }
+
+    ArrayList<File> mapDirFiles(File listFile[]){
+        ArrayList<File> fileArrayList = new ArrayList<>() ;
+        for(int i = 0 ; i < listFile.length ; i ++){
+            try {
+                File listSubFile[] = listFile[i].listFiles() ;
+                for(int  j = 0 ; j < listSubFile.length ; j ++ ){
+                    fileArrayList.add(listSubFile[j]) ;
+                }
+            }catch (Exception e){
+
+            }
+
+        }
+        return fileArrayList ;
     }
 
 }
