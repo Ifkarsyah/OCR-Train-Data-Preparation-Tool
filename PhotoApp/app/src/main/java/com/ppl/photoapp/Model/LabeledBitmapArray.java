@@ -11,4 +11,20 @@ public class LabeledBitmapArray
         this.bitmap = bitmap;
         this.label = label;
     }
+
+    public Bitmap[] getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap[] bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public int getLabel() {
+        return label;
+    }
+
+    public void setLabel(int label) {
+        this.label = label;
+    }
 }

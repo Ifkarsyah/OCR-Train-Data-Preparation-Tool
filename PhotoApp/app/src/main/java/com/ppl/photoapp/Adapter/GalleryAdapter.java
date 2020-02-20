@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.ppl.photoapp.Fragment.GalleryFragment;
 import com.ppl.photoapp.GlobalVariable.Global;
@@ -40,7 +39,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyHolder
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_gallery,viewGroup,false) ;
+        View view = LayoutInflater.from(context).inflate(R.layout.item_image,viewGroup,false) ;
         return new MyHolder(view);
     }
 
