@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigationView = findViewById(R.id.navigation) ;
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
-        
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
