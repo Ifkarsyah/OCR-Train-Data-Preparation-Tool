@@ -33,8 +33,6 @@ public class SplitingActivity extends AppCompatActivity {
         ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
         arrBitmap = OpenCV.getArrayBitmap(Global.bitmap) ;
         arrLabeledBitmap = OpenCV.mappingBitmap(arrBitmap) ;
-
-
     }
 
     void CheckInputBitmap(){
