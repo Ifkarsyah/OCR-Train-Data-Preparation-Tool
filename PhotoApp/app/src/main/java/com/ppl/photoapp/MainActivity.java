@@ -13,7 +13,7 @@ import com.ppl.photoapp.Fragment.GalleryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Mark Feature See Gallery
+    //Mark Feature See Gallery-2
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
