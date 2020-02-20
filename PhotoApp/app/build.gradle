@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.jcminarro:RoundKornerLayouts:0.4.0'
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    implementation 'com.github.chrisbanes:PhotoView:1.2.6'
 }

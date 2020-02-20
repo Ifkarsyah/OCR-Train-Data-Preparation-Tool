@@ -11,6 +11,9 @@ import com.ppl.photoapp.GlobalVariable.Global;
 
 import java.io.File;
 
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class LookImageActivity extends AppCompatActivity {
 
     @Override
@@ -32,6 +35,8 @@ public class LookImageActivity extends AppCompatActivity {
             File imgFile = new File(intentPathBitmap);
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             ImageView imageView = findViewById(R.id.imageView) ;
+            PhotoViewAttacher photoView = new PhotoViewAttacher(imageView) ;
+            photoView.update();
             imageView.setImageBitmap(myBitmap) ;
         }
     }
