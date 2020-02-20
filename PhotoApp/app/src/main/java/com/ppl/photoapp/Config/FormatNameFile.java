@@ -13,4 +13,9 @@ public class FormatNameFile
     public static boolean isAvaiableExtension(String extentsionFile){
         return extentsionFile.equals(Config.EXTENTION_FILE) ;
     }
+
+    public static String NamingSavedFile(String date,int index){
+        String fileName = date + "-" + index + Config.EXTENTION_FILE;
+        return fileName ;
+    }
 }

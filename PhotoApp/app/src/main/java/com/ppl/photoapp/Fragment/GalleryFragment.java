@@ -2,6 +2,7 @@ package com.ppl.photoapp.Fragment;
 
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -51,11 +52,12 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        AssignWidget(view); ;
+        AssignWidget(view);
         CheckPermissions() ;
         ButtonPermissionRequest() ;
-        SetGallery() ;
         SetFilterNumberView() ;
+        SetGallery() ;
+
 
         return view ;
     }
@@ -86,7 +88,6 @@ public class GalleryFragment extends Fragment {
         else {
             lnBeforePermission.setVisibility(View.GONE);
             lnAfterPermission.setVisibility(View.VISIBLE);
-            SetGallery() ;
         }
     }
 
@@ -113,10 +114,20 @@ public class GalleryFragment extends Fragment {
         }
     }
 
+    public void SetCheckedNumber(){
+        SharedPreferences pref = getContext().getSharedPreferences(Config.PREF_GALLERY, 0) ;
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(Config.KEY_GALLERY_NUMBER,numberAdapter.checkedNumber) ;
+        editor.commit() ;
+    }
+
     void SetFilterNumberView(){
         recyclerViewNumber.setHasFixedSize(true);
         recyclerViewNumber.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        numberAdapter = new NumberAdapter(getContext(),Config.FITLER_NUMBER,this) ;
+
+        SharedPreferences pref = getContext().getSharedPreferences(Config.PREF_GALLERY, 0) ;
+        int checkedNumber = pref.getInt(Config.KEY_GALLERY_NUMBER, -1);
+        numberAdapter = new NumberAdapter(getContext(),Config.FITLER_NUMBER,this,checkedNumber) ;
         numberAdapter.notifyDataSetChanged();
         recyclerViewNumber.setAdapter(numberAdapter);
     }
@@ -126,7 +137,13 @@ public class GalleryFragment extends Fragment {
         String root = Environment.getExternalStorageDirectory().getAbsolutePath();
         File folder = new File(FormatNameFile.RootFolder(root));
         folder.mkdirs();
-        arrPath = getImagesPath(folder) ;
+
+        if (numberAdapter.checkedNumber != -1) {
+            arrPath = getImagesPathByNumber(numberAdapter.checkedNumber);
+        }else {
+            arrPath = getImagesPath(folder);
+        }
+
         recyclerViewGallery.setLayoutManager(new GridLayoutManager(getActivity(),3));
         galleryAdapter = new GalleryAdapter(getContext(),arrPath,this) ;
         galleryAdapter.notifyDataSetChanged();
@@ -134,8 +151,8 @@ public class GalleryFragment extends Fragment {
     }
 
     public void NumberChanged(){
-        if (NumberAdapter.checkedNumber != -1) {
-            arrPath = getImagesPathByNumber(NumberAdapter.checkedNumber);
+        if (numberAdapter.checkedNumber != -1) {
+            arrPath = getImagesPathByNumber(numberAdapter.checkedNumber);
             galleryAdapter = new GalleryAdapter(getContext(), arrPath,this);
             galleryAdapter.notifyDataSetChanged();
             recyclerViewGallery.setAdapter(galleryAdapter);
@@ -174,17 +191,40 @@ public class GalleryFragment extends Fragment {
     public ArrayList<String> getImagesPath(File dir) {
         ArrayList<String> fileList = new ArrayList<>() ;
         File listFile[] = dir.listFiles();
-        if (listFile != null && listFile.length > 0) {
-            for (File file : listFile) {
-                String path = file.toString() ;
-                String extentsionFile = path.substring(path.lastIndexOf("."));
-                if (FormatNameFile.isAvaiableExtension(extentsionFile))
-                {
-                    fileList.add(path);
+        ArrayList<File> fileArrayList = mapDirFiles(listFile) ;
+
+        if (fileArrayList != null && fileArrayList.size() > 0) {
+            for (File file : fileArrayList) {
+                try {
+                    String path = file.toString() ;
+                    String extentsionFile = path.substring(path.lastIndexOf("."));
+                    if (FormatNameFile.isAvaiableExtension(extentsionFile))
+                    {
+                        fileList.add(path);
+                    }
+                }catch (Exception e){
+
                 }
+
             }
         }
         return fileList;
+    }
+
+    ArrayList<File> mapDirFiles(File listFile[]){
+        ArrayList<File> fileArrayList = new ArrayList<>() ;
+        for(int i = 0 ; i < listFile.length ; i ++){
+            try {
+                File listSubFile[] = listFile[i].listFiles() ;
+                for(int  j = 0 ; j < listSubFile.length ; j ++ ){
+                    fileArrayList.add(listSubFile[j]) ;
+                }
+            }catch (Exception e){
+
+            }
+
+        }
+        return fileArrayList ;
     }
 
 }

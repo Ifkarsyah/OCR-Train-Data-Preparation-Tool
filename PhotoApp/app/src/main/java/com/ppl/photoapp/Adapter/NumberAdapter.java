@@ -26,14 +26,14 @@ public class NumberAdapter extends RecyclerView.Adapter<NumberAdapter.MyHolder>
 {
     Context context ;
     int[] number ;
-    public static int checkedNumber ;
+    public int checkedNumber ;
     GalleryFragment galleryFragment ;
 
-    public NumberAdapter(Context context, int[] number, GalleryFragment galleryFragment) {
+    public NumberAdapter(Context context, int[] number, GalleryFragment galleryFragment,int checkedNumber) {
         this.context = context;
         this.number = number;
         this.galleryFragment = galleryFragment;
-        checkedNumber = -1 ;
+        this.checkedNumber = checkedNumber ;
     }
 
     @NonNull
@@ -71,10 +71,9 @@ public class NumberAdapter extends RecyclerView.Adapter<NumberAdapter.MyHolder>
                 checkedNumber = number[i] ;
                 galleryFragment.UpdateRecylerViewNumber();
                 galleryFragment.NumberChanged();
+                galleryFragment.SetCheckedNumber() ;
             }
         });
-
-
     }
 
     @Override
