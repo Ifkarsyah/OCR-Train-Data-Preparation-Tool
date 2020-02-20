@@ -2,6 +2,7 @@ package com.ppl.photoapp.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ppl.photoapp.Fragment.GalleryFragment;
+import com.ppl.photoapp.GlobalVariable.Global;
+import com.ppl.photoapp.LookImageActivity;
 import com.ppl.photoapp.R;
 
 import java.io.File;
@@ -47,6 +50,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyHolder
         File imgFile = new File(path);
         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
         myHolder.ivImage.setImageBitmap(myBitmap);
+
+        myHolder.rlImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LookImageActivity.class) ;
+                intent.putExtra(Global.INTENT_PATH_BITMAP,path) ;
+                context.startActivity(intent) ;
+            }
+        });
 
         myHolder.rlImage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
