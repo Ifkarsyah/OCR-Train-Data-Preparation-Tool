@@ -9,4 +9,8 @@ public class FormatNameFile
     public static String RootFolder(String root){
         return root + "/" + Config.ROOT_FOLDER ;
     }
+
+    public static boolean isAvaiableExtension(String extentsionFile){
+        return extentsionFile.equals(Config.EXTENTION_FILE) ;
+    }
 }

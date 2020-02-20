@@ -178,7 +178,7 @@ public class GalleryFragment extends Fragment {
             for (File file : listFile) {
                 String path = file.toString() ;
                 String extentsionFile = path.substring(path.lastIndexOf("."));
-                if (extentsionFile.equals(Config.EXTENTION_FILE))
+                if (FormatNameFile.isAvaiableExtension(extentsionFile))
                 {
                     fileList.add(path);
                 }
