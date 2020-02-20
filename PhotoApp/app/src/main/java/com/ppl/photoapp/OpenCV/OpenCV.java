@@ -10,7 +10,6 @@ public class OpenCV
 {
     public static ArrayList<Bitmap> getArrayBitmap(Bitmap bitmapInput){
         ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
-
         //Dummy
         for(int i = 0 ; i < 4*10 ; i ++ ){
              arrBitmap.add(bitmapInput) ;
