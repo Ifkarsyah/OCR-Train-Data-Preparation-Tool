@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SplitingActivity"></activity>
         <activity android:name=".ResultActivity" />
+        <activity android:name=".LookImageActivity"></activity>
         <activity android:name=".SettingActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
@@ -23,9 +24,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+
     </application>
 
 </manifest>

@@ -1,15 +1,26 @@
 package com.ppl.photoapp.Adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ppl.photoapp.Fragment.GalleryFragment;
 import com.ppl.photoapp.R;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class NumberAdapter extends RecyclerView.Adapter<NumberAdapter.MyHolder>
 {
@@ -58,10 +69,11 @@ public class NumberAdapter extends RecyclerView.Adapter<NumberAdapter.MyHolder>
             @Override
             public void onClick(View v) {
                 checkedNumber = number[i] ;
-//                galleryFragment.UpdateRecylerViewNumber();
-//                galleryFragment.NumberChanged();
+                galleryFragment.UpdateRecylerViewNumber();
+                galleryFragment.NumberChanged();
             }
         });
+
 
     }
 
