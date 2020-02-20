@@ -23,12 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigationView = findViewById(R.id.navigation) ;
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
-
-        //Default
-        CameraFragment fragment = new CameraFragment() ;
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction() ;
-        ft.replace(R.id.content,fragment,"") ;
-        ft.commit() ;
+        
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
