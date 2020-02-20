@@ -1,6 +1,7 @@
 package com.ppl.photoapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.ppl.photoapp.GlobalVariable.Global;
+import com.ppl.photoapp.LookImageActivity;
+import com.ppl.photoapp.LookSplitImageActivity;
 import com.ppl.photoapp.Model.LabeledBitmapArray;
 import com.ppl.photoapp.R;
 import com.ppl.photoapp.SplitingActivity;
@@ -37,8 +41,17 @@ public class SplitingHorizontalAdapter extends RecyclerView.Adapter<SplitingHori
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        Bitmap bitmap = bitmaps[i] ;
+        final Bitmap bitmap = bitmaps[i] ;
         myHolder.ivImage.setImageBitmap(bitmap);
+
+        myHolder.rlImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LookSplitImageActivity.class) ;
+                Global.splitedBitmap = bitmap ;
+                context.startActivity(intent) ;
+            }
+        });
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.ppl.photoapp.Model.LabeledBitmapArray;
 import com.ppl.photoapp.R;
 import com.ppl.photoapp.SplitingActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVerticalAdapter.MyHolder>
@@ -58,7 +60,7 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         myHolder.lnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ShowDialogDelete(i);
             }
         });
 
@@ -66,12 +68,38 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         myHolder.lnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowEdit(i) ;
+                ShowDialogEdit(i) ;
             }
         });
     }
 
-    void ShowEdit(final int position){
+    void ShowDialogDelete(final int position){
+        final Dialog dialog = new Dialog(context) ;
+        dialog.setContentView(R.layout.dialog_delete_row) ;
+        dialog.setCancelable(true) ;
+
+        Button btnAccept = dialog.findViewById(R.id.btnAccept) ;
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button btnCancel = dialog.findViewById(R.id.btnCancel) ;
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)) ;
+        dialog.show();
+    }
+
+    void ShowDialogEdit(final int position){
         final Dialog dialog = new Dialog(context) ;
         dialog.setContentView(R.layout.dialog_put_number) ;
         dialog.setCancelable(true) ;
