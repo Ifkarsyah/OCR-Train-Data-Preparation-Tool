@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class SplitingActivity extends AppCompatActivity {
 
     ArrayList<LabeledBitmapArray> arrLabeledBitmap;
-    public RecyclerView recyclerViewVertical;
+    RecyclerView recyclerViewVertical;
     SplitingVerticalAdapter splitingVerticalAdapter;
 
     @Override
@@ -37,6 +37,10 @@ public class SplitingActivity extends AppCompatActivity {
         GetLabeledBitmap() ;
         ButtonSave() ;
         SetSplitingView() ;
+    }
+
+    public void UpdateSplitingView(){
+        splitingVerticalAdapter.notifyDataSetChanged();
     }
 
     void SetSplitingView(){

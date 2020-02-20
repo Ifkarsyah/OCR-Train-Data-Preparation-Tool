@@ -12,6 +12,9 @@ public class LabeledBitmapArray
         this.label = label;
     }
 
+    public LabeledBitmapArray() {
+    }
+
     public Bitmap[] getBitmap() {
         return bitmap;
     }

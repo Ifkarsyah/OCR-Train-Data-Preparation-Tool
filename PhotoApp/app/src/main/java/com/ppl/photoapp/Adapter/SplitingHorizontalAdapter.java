@@ -26,6 +26,9 @@ public class SplitingHorizontalAdapter extends RecyclerView.Adapter<SplitingHori
     Bitmap[] bitmaps ;
     SplitingActivity splitingActivity ;
 
+    public SplitingHorizontalAdapter() {
+    }
+
     public SplitingHorizontalAdapter(Context context, Bitmap[] bitmaps, SplitingActivity splitingActivity) {
         this.context = context;
         this.bitmaps = bitmaps;

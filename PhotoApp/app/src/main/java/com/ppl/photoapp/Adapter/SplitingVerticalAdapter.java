@@ -47,14 +47,11 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         Bitmap[] bitmaps = labeledBitmapArray.getBitmap() ;
         myHolder.tvLabel.setText(labeledBitmapArray.getLabel()+"");
 
-        //Set RecyclerView Horizontal
-        SplitingHorizontalAdapter splitingHorizontalAdapter ;
-        myHolder.recyclerViewHorizontal.setHasFixedSize(true);
-        myHolder.recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        splitingHorizontalAdapter = new SplitingHorizontalAdapter(context,bitmaps,splitingActivity) ;
-        splitingHorizontalAdapter.notifyDataSetChanged();
-        myHolder.recyclerViewHorizontal.setAdapter(splitingHorizontalAdapter);
-        myHolder.recyclerViewHorizontal.setNestedScrollingEnabled(false) ;
+        if (myHolder.recyclerViewHorizontal.getAdapter() == null){
+            SplitingHorizontalAdapter splitingHorizontalAdapter = new SplitingHorizontalAdapter(context,bitmaps,splitingActivity) ;
+            splitingHorizontalAdapter.notifyDataSetChanged() ;
+            myHolder.recyclerViewHorizontal.setAdapter(splitingHorizontalAdapter);
+        }
 
         //Delete
         myHolder.lnDelete.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +79,7 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DeleteRow(position) ;
                 dialog.dismiss();
             }
         });
@@ -90,13 +88,17 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dialog.dismiss();
             }
         });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)) ;
         dialog.show();
+    }
+
+    void DeleteRow(final int position){
+        arrLabeledBitmap.remove(position) ;
+        splitingActivity.UpdateSplitingView();
     }
 
     void ShowDialogEdit(final int position){
@@ -131,7 +133,8 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
     }
 
     void ChangeLabel(int position,int label){
-
+        arrLabeledBitmap.get(position).setLabel(label) ;
+        splitingActivity.UpdateSplitingView();
     }
 
     @Override
@@ -150,6 +153,11 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
             lnEdit = itemView.findViewById(R.id.lnEdit) ;
             tvLabel = itemView.findViewById(R.id.tvLabel) ;
             recyclerViewHorizontal = itemView.findViewById(R.id.recyclerViewSplitingHorizontal) ;
+
+            //Set RecyclerView Horizontal
+            recyclerViewHorizontal.setHasFixedSize(true);
+            recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            recyclerViewHorizontal.setNestedScrollingEnabled(false) ;
         }
     }
 }
