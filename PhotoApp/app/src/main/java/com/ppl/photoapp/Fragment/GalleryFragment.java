@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.ppl.photoapp.Adapter.GalleryAdapter;
 import com.ppl.photoapp.Adapter.NumberAdapter;
 import com.ppl.photoapp.Config.Config;
+import com.ppl.photoapp.Config.FormatNameFile;
 import com.ppl.photoapp.R;
 
 import java.io.File;
@@ -115,7 +116,7 @@ public class GalleryFragment extends Fragment {
     void SetFilterNumberView(){
         recyclerViewNumber.setHasFixedSize(true);
         recyclerViewNumber.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        numberAdapter = new NumberAdapter(getContext(),new int[]{-1,0,1,2,3,4,5,6,7,8,9},this) ;
+        numberAdapter = new NumberAdapter(getContext(),Config.FITLER_NUMBER,this) ;
         numberAdapter.notifyDataSetChanged();
         recyclerViewNumber.setAdapter(numberAdapter);
     }
@@ -123,7 +124,7 @@ public class GalleryFragment extends Fragment {
     void SetGallery(){
         recyclerViewGallery.setHasFixedSize(true);
         String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File folder = new File(root + "/" + Config.ROOT_FOLDER);
+        File folder = new File(FormatNameFile.RootFolder(root));
         folder.mkdirs();
         arrPath = getImagesPath(folder) ;
         recyclerViewGallery.setLayoutManager(new GridLayoutManager(getActivity(),3));
@@ -140,7 +141,7 @@ public class GalleryFragment extends Fragment {
             recyclerViewGallery.setAdapter(galleryAdapter);
         }else {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-            File folder = new File(root + "/" + Config.ROOT_FOLDER);
+            File folder = new File(FormatNameFile.RootFolder(root));
             folder.mkdirs();
             arrPath = getImagesPath(folder);
             galleryAdapter = new GalleryAdapter(getContext(), arrPath,this);
@@ -151,14 +152,14 @@ public class GalleryFragment extends Fragment {
 
     public ArrayList<String> getImagesPathByNumber(int number){
         String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File folder = new File(root + "/" + Config.ROOT_FOLDER);
+        File folder = new File(FormatNameFile.RootFolder(root));
         folder.mkdirs();
         ArrayList<String> allImagesPath = getImagesPath(folder) ;
 
         ArrayList<String> outputArrayList = new ArrayList<>() ;
         for (int i = 0 ; i < allImagesPath.size() ; i ++){
             String str = allImagesPath.get(i) ;
-            if (str.contains(Config.SUFFIX_NAME_FILE + number)){
+            if (str.contains(FormatNameFile.SubFolder(number))){
                 outputArrayList.add(str) ;
             }
         }
@@ -177,7 +178,7 @@ public class GalleryFragment extends Fragment {
             for (File file : listFile) {
                 String path = file.toString() ;
                 String extentsionFile = path.substring(path.lastIndexOf("."));
-                if (extentsionFile.equals(".jpg"))
+                if (extentsionFile.equals(Config.EXTENTION_FILE))
                 {
                     fileList.add(path);
                 }
