@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.core.Scalar;
@@ -42,14 +44,35 @@ public class OpenCV
         Mat thresh = new Mat();
         Imgproc.adaptiveThreshold(gray, thresh, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 57, 5);
         Mat mono = new Mat();
-        Core.add(thresh, new Scalar(-255, -255, -255), mono);
+        Core.subtract(new Mat(image.rows(),image.cols(), image.type(), new Scalar(255,255,255)), thresh, mono);
 
         // Filter out all numbers and noise to isolate only boxes
         LinkedList<MatOfPoint> cnts = new LinkedList<>();
         Mat hierarchy = new Mat();
         Imgproc.findContours(thresh, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
         hierarchy.release();
+        for (MatOfPoint c : cnts){
+            double area = Imgproc.contourArea(c);
+            if (area < 100000){
+                List<MatOfPoint> drawCnt = new ArrayList<>();
+                drawCnt.add(c);
+                Imgproc.drawContours(thresh, drawCnt, -1, new Scalar(0, 0, 0), -1);
+            }
+        }
 
+        // Fix horizontal and vertical lines
+        Mat vertical_kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(1, 5));
+        Imgproc.morphologyEx(thresh, thresh, Imgproc.MORPH_CLOSE, vertical_kernel, new Point(-1, -1), 9);
+        Mat horizontal_kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 1));
+        Imgproc.morphologyEx(thresh, thresh, Imgproc.MORPH_CLOSE, horizontal_kernel, new Point(-1, -1), 4);
+
+        // Sort by left to right
+        Mat invert = new Mat();
+        Core.subtract(new Mat(image.rows(),image.cols(), image.type(), new Scalar(255,255,255)), thresh, invert);
+        Imgproc.findContours(invert, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        hierarchy.release();
+
+        // Remove non-square contours, approximated by scale
         LinkedList<MatOfPoint> tmp = new LinkedList<>();
         for (MatOfPoint cnt : cnts){
             Rect bb = Imgproc.boundingRect(cnt);
@@ -68,6 +91,7 @@ public class OpenCV
             }
         } );
 
+        // Iterate through each box, output to Bitmap
         ArrayList<Bitmap> arrBitmap = new ArrayList<>();
         while (!cnts.isEmpty()){
             MatOfPoint cnt = cnts.removeFirst();
