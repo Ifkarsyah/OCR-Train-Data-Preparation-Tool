@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +44,12 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, final int i) {
+        Log.d("AppKu", "i == " + i);
         final LabeledBitmapArray labeledBitmapArray = arrLabeledBitmap.get(i) ;
         Bitmap[] bitmaps = labeledBitmapArray.getBitmap() ;
         myHolder.tvLabel.setText(labeledBitmapArray.getLabel()+"");
 
-        if (myHolder.recyclerViewHorizontal.getAdapter() == null){
+        if (myHolder.recyclerViewHorizontal.getAdapter() == null || i == 9){
             SplitingHorizontalAdapter splitingHorizontalAdapter = new SplitingHorizontalAdapter(context,bitmaps,splitingActivity) ;
             splitingHorizontalAdapter.notifyDataSetChanged() ;
             myHolder.recyclerViewHorizontal.setAdapter(splitingHorizontalAdapter);
