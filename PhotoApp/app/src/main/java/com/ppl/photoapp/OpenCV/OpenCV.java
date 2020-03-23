@@ -111,7 +111,6 @@ public class OpenCV
     public static ArrayList<LabeledBitmapArray> mappingBitmap(ArrayList<Bitmap> arrBitmap){
         ArrayList<LabeledBitmapArray> arrLabeledBitmap = new ArrayList<>() ;
 
-        //Dummy
         for(int i = 0 ; i < arrBitmap.size()/COUNT_IMAGES_IN_ONE_ROW ; i ++ ){
             Bitmap[] bitmaps = new Bitmap[COUNT_IMAGES_IN_ONE_ROW] ;
             for(int j = 0 ; j < bitmaps.length ; j ++ ){
