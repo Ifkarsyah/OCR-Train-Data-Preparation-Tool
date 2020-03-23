@@ -33,18 +33,18 @@ public class OpenCV
         Utils.bitmapToMat(bmp, orig);
 
         int width = Math.min(1000, orig.cols());
-        int height = width / orig.rows() * orig.rows();
+        int height = width * orig.rows() / orig.cols() ;
         Size sz = new Size(width, height);
 
         // Grayscale, adaptive threshold, and monochromatic invert from thresh
         Mat image = new Mat();
         Imgproc.resize(orig, image, sz , 0, 0, Imgproc.INTER_AREA);
         Mat gray = new Mat();
-        Imgproc.cvtColor(image, gray, Imgproc.COLOR_BayerBG2GRAY);
+        Imgproc.cvtColor(image, gray, Imgproc.COLOR_BGR2GRAY);
         Mat thresh = new Mat();
         Imgproc.adaptiveThreshold(gray, thresh, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 57, 5);
         Mat mono = new Mat();
-        Core.subtract(new Mat(image.rows(),image.cols(), image.type(), new Scalar(255,255,255)), thresh, mono);
+        Core.bitwise_not(thresh, mono);
 
         // Filter out all numbers and noise to isolate only boxes
         LinkedList<MatOfPoint> cnts = new LinkedList<>();
@@ -68,12 +68,14 @@ public class OpenCV
 
         // Sort by left to right
         Mat invert = new Mat();
-        Core.subtract(new Mat(image.rows(),image.cols(), image.type(), new Scalar(255,255,255)), thresh, invert);
-        Imgproc.findContours(invert, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Core.bitwise_not(thresh, invert);
+        LinkedList<MatOfPoint> tmp = new LinkedList<>();
+        Imgproc.findContours(invert, tmp, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
         hierarchy.release();
+        cnts = tmp;
 
         // Remove non-square contours, approximated by scale
-        LinkedList<MatOfPoint> tmp = new LinkedList<>();
+        tmp = new LinkedList<>();
         for (MatOfPoint cnt : cnts){
             Rect bb = Imgproc.boundingRect(cnt);
             float ratio = ((float) bb.width)/bb.height;
