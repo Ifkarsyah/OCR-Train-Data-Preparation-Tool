@@ -60,11 +60,11 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     void OpenCameraOrGallery(){
-        CropImage.activity().start(this);
-//        ImageView imageView = findViewById(R.id.imageView) ;
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.foto_2);
-//        imageView.setImageBitmap(bitmap);
-//        Global.bitmap = bitmap ;
+//        CropImage.activity().start(this);
+        ImageView imageView = findViewById(R.id.imageView) ;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.foto_2);
+        imageView.setImageBitmap(bitmap);
+        Global.bitmap = bitmap ;
     }
 
     @Override

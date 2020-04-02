@@ -4,6 +4,7 @@ package com.ppl.photoapp.Fragment;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -134,58 +135,69 @@ public class GalleryFragment extends Fragment {
 
     void SetGallery(){
         recyclerViewGallery.setHasFixedSize(true);
-        String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File folder = new File(FormatNameFile.RootFolder(root));
-        folder.mkdirs();
-
-        if (numberAdapter.checkedNumber != -1) {
-            arrPath = getImagesPathByNumber(numberAdapter.checkedNumber);
-        }else {
-            arrPath = getImagesPath(folder);
-        }
-
         recyclerViewGallery.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        galleryAdapter = new GalleryAdapter(getContext(),arrPath,this) ;
-        galleryAdapter.notifyDataSetChanged();
-        recyclerViewGallery.setAdapter(galleryAdapter);
+        if (numberAdapter.checkedNumber != -1) {
+            new getImagesPathByNumber_Async(numberAdapter.checkedNumber).execute(getFolderPath()) ;
+        }else {
+            new getImagesPath_Async().execute(getFolderPath()) ;
+        }
     }
 
     public void NumberChanged(){
         if (numberAdapter.checkedNumber != -1) {
-            arrPath = getImagesPathByNumber(numberAdapter.checkedNumber);
-            galleryAdapter = new GalleryAdapter(getContext(), arrPath,this);
-            galleryAdapter.notifyDataSetChanged();
-            recyclerViewGallery.setAdapter(galleryAdapter);
+            new getImagesPathByNumber_Async(numberAdapter.checkedNumber).execute(getFolderPath()) ;
         }else {
-            String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-            File folder = new File(FormatNameFile.RootFolder(root));
-            folder.mkdirs();
-            arrPath = getImagesPath(folder);
-            galleryAdapter = new GalleryAdapter(getContext(), arrPath,this);
-            galleryAdapter.notifyDataSetChanged();
-            recyclerViewGallery.setAdapter(galleryAdapter);
+            new getImagesPath_Async().execute(getFolderPath()) ;
         }
-    }
-
-    public ArrayList<String> getImagesPathByNumber(int number){
-        String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File folder = new File(FormatNameFile.RootFolder(root));
-        folder.mkdirs();
-        ArrayList<String> allImagesPath = getImagesPath(folder) ;
-
-        ArrayList<String> outputArrayList = new ArrayList<>() ;
-        for (int i = 0 ; i < allImagesPath.size() ; i ++){
-            String str = allImagesPath.get(i) ;
-            if (str.contains(FormatNameFile.SubFolder(number))){
-                outputArrayList.add(str) ;
-            }
-        }
-
-        return outputArrayList ;
     }
 
     public void UpdateRecylerViewNumber(){
         numberAdapter.notifyDataSetChanged();
+    }
+
+    private class getImagesPath_Async extends AsyncTask<File, Integer, ArrayList<String>> {
+        @Override
+        protected ArrayList<String> doInBackground(File... files) {
+            return getImagesPath(files[0]) ;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> strings) {
+            arrPath = strings ;
+            SetArrPathToRecyclerView() ;
+        }
+    }
+
+    private class getImagesPathByNumber_Async extends AsyncTask<File, Integer, ArrayList<String>> {
+        int number ;
+
+        public getImagesPathByNumber_Async(int number) {
+            super();
+            this.number = number ;
+        }
+
+        @Override
+        protected ArrayList<String> doInBackground(File... files) {
+            ArrayList<String> temp = getImagesPath(files[0]) ;
+            return getImagesPathByNumber(number,temp) ;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> strings) {
+            arrPath = strings ;
+            SetArrPathToRecyclerView() ;
+        }
+    }
+
+    public ArrayList<String> getImagesPathByNumber(int number,ArrayList<String> arrAllPath){
+        ArrayList<String> outputArrayList = new ArrayList<>() ;
+        for (int i = 0 ; i < arrAllPath.size() ; i ++){
+            String str = arrAllPath.get(i) ;
+            if (str.contains(FormatNameFile.SubFolder(number))){
+                outputArrayList.add(str) ;
+            }
+        }
+        return outputArrayList ;
     }
 
     public ArrayList<String> getImagesPath(File dir) {
@@ -229,4 +241,16 @@ public class GalleryFragment extends Fragment {
         return fileArrayList ;
     }
 
+    File getFolderPath(){
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File folder = new File(FormatNameFile.RootFolder(root));
+        folder.mkdirs();
+        return folder ;
+    }
+
+    void SetArrPathToRecyclerView(){
+        galleryAdapter = new GalleryAdapter(getContext(),arrPath,this) ;
+        galleryAdapter.notifyDataSetChanged();
+        recyclerViewGallery.setAdapter(galleryAdapter);
+    }
 }
