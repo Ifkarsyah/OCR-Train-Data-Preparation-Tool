@@ -213,16 +213,18 @@ public class GalleryFragment extends Fragment {
 
     ArrayList<File> mapDirFiles(File listFile[]){
         ArrayList<File> fileArrayList = new ArrayList<>() ;
-        for(int i = 0 ; i < listFile.length ; i ++){
-            try {
-                File listSubFile[] = listFile[i].listFiles() ;
-                for(int  j = 0 ; j < listSubFile.length ; j ++ ){
-                    fileArrayList.add(listSubFile[j]) ;
+        if (listFile != null){
+            for(int i = 0 ; i < listFile.length ; i ++){
+                try {
+                    File listSubFile[] = listFile[i].listFiles() ;
+                    for(int  j = 0 ; j < listSubFile.length ; j ++ ){
+                        fileArrayList.add(listSubFile[j]) ;
+                    }
+                }catch (Exception e){
+
                 }
-            }catch (Exception e){
 
             }
-
         }
         return fileArrayList ;
     }

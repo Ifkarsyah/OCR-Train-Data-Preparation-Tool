@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ppl.photoapp.Adapter.NumberAdapter;
@@ -30,6 +32,7 @@ public class SplitingActivity extends AppCompatActivity {
     RecyclerView recyclerViewVertical;
     SplitingVerticalAdapter splitingVerticalAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,19 @@ public class SplitingActivity extends AppCompatActivity {
         GetLabeledBitmap() ;
         ButtonSave() ;
         SetSplitingView() ;
+    }
+
+    public void DeleteSingleItem(final int positionVertical,final int positionHorizontal){
+        arrLabeledBitmap.get(positionVertical).deleteItem(positionHorizontal) ;
+        if (arrLabeledBitmap.get(positionVertical).getBitmap().length == 0){
+            arrLabeledBitmap.remove(positionVertical) ;
+        }
+        UpdateSplitingView();
+    }
+
+    public void DeleteRow(int position){
+        arrLabeledBitmap.remove(position) ;
+        UpdateSplitingView();
     }
 
     public void UpdateSplitingView(){

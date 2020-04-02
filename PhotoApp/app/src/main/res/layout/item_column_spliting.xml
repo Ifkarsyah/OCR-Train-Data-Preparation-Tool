@@ -29,6 +29,8 @@
             android:id="@+id/ivImage"
             android:scaleType="fitCenter"
             />
+
+
     </RelativeLayout>
 
 
