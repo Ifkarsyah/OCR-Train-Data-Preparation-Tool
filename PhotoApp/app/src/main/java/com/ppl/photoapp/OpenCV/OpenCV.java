@@ -122,4 +122,18 @@ public class OpenCV
         return arrLabeledBitmap ;
     }
 
+    public static Bitmap correctBitmapPerspective(Bitmap wholeBitmap) {
+        // TODO asif
+        return wholeBitmap;
+    }
+
+    public static Bitmap deleteNoise(Bitmap splittedBitmap) {
+        // TODO alam
+        return splittedBitmap;
+    }
+
+    public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap) {
+        // TODO suhailie
+        return splittedBitmap;
+    }
 }
