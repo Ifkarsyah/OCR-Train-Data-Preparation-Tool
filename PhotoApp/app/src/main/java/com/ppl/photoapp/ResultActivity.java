@@ -79,7 +79,6 @@ public class ResultActivity extends AppCompatActivity {
             try
             {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver() , imageUri);
-                // bitmap = BitmapOperation.toBlackWhite(bitmap) ;
                 ImageView imageView = findViewById(R.id.imageView) ;
                 imageView.setImageBitmap(bitmap);
                 Global.bitmap = bitmap ;

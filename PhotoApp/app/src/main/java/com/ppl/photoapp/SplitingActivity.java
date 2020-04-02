@@ -1,7 +1,9 @@
 package com.ppl.photoapp;
 
+import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,8 +33,7 @@ public class SplitingActivity extends AppCompatActivity {
     ArrayList<LabeledBitmapArray> arrLabeledBitmap;
     RecyclerView recyclerViewVertical;
     SplitingVerticalAdapter splitingVerticalAdapter;
-
-
+    ProgressDialog progressDialog ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +42,14 @@ public class SplitingActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("Result Spliting");
 
+        progressDialog = new ProgressDialog(this) ;
+        progressDialog.setMessage("Spliting");
+        progressDialog.setCancelable(false) ;
+
         CheckInputBitmap() ;
         GetLabeledBitmap() ;
         ButtonSave() ;
-        SetSplitingView() ;
+//        SetSplitingView() ;
     }
 
     public void DeleteSingleItem(final int positionVertical,final int positionHorizontal){
@@ -114,11 +119,34 @@ public class SplitingActivity extends AppCompatActivity {
 
         }
     }
+
     void GetLabeledBitmap(){
         arrLabeledBitmap = new ArrayList<>() ;
-        ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
-        arrBitmap = OpenCV.getArrayBitmap(Global.bitmap) ;
-        arrLabeledBitmap = OpenCV.mappingBitmap(arrBitmap) ;
+        new openCV_Async().execute(Global.bitmap) ;
+    }
+
+    private class openCV_Async extends AsyncTask<Bitmap, Integer, ArrayList<LabeledBitmapArray>> {
+        @Override
+        protected void onPreExecute() {
+            //Start Loading
+            progressDialog.show();
+        }
+
+        @Override
+        protected ArrayList<LabeledBitmapArray> doInBackground(Bitmap... bitmaps) {
+            ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
+            arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]) ;
+            ArrayList<LabeledBitmapArray> temp = OpenCV.mappingBitmap(arrBitmap) ;
+            return temp;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<LabeledBitmapArray> labeledBitmapArrays) {
+            arrLabeledBitmap = labeledBitmapArrays ;
+            SetSplitingView() ;
+            //End Loading
+            progressDialog.dismiss();
+        }
     }
 
     void CheckInputBitmap(){
