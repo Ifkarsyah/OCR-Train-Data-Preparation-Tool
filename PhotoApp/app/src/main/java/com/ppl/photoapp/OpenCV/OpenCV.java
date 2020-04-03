@@ -33,20 +33,13 @@ public class OpenCV
     public static ArrayList<Bitmap> getArrayBitmap(Bitmap bitmapInput){
         // Input: bitmapInput == the whole image not split yet
 
-        // Load image and resize into maximum of 1000px width
+        // Load image
         Mat orig = new Mat();
         Bitmap bmp = bitmapInput.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp, orig);
 
-        int width = Math.min(1000, orig.cols());
-        int height = width * orig.rows() / orig.cols() ;
-        Size sz = new Size(width, height);
-
-        // Grayscale, adaptive threshold, and monochromatic invert from thresh
-        Mat image = new Mat();
-        Imgproc.resize(orig, image, sz , 0, 0, Imgproc.INTER_AREA);
         Mat gray = new Mat();
-        Imgproc.cvtColor(image, gray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(orig, gray, Imgproc.COLOR_BGR2GRAY);
         Mat thresh = new Mat();
         Imgproc.adaptiveThreshold(gray, thresh, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 57, 5);
 
@@ -84,26 +77,35 @@ public class OpenCV
         for (Point pt : pts){
             if (pt.x + pt.y > br.x + br.y) br = pt;
             if (pt.x + pt.y < tl.x + tl.y) tl = pt;
-            if (pt.x - pt.y > tr.x - tr.y) tr = pt;
-            if (pt.x - pt.y < bl.x - bl.y) bl = pt;
+            if (pt.y - pt.x > bl.y - bl.x) bl = pt;
+            if (pt.y - pt.x < tr.y - tr.x) tr = pt;
         };
 
-        List<Point> rect_p = Arrays.asList(tl, bl, tr, br);
         double heightA = Math.sqrt(Math.pow(tr.x - br.x, 2) + Math.pow(tr.y - br.y, 2));
         double heightB = Math.sqrt(Math.pow(tl.x - bl.x, 2) + Math.pow(tl.y - bl.y, 2));
         int maxHeight = Math.max((int) heightA , (int) heightB);
         int maxWidth = (int) (maxHeight / 1.414);
 
         // Perspective correction
-        List<Point> dst = new ArrayList<>();
-        dst.add(new Point(0, 0));
-        dst.add(new Point(maxWidth - 1, 0));
-        dst.add(new Point(maxWidth - 1, maxHeight - 1));
-        dst.add(new Point(0, maxHeight - 1));
-        Mat M = Imgproc.getPerspectiveTransform(Converters.vector_Point_to_Mat(rect_p), Converters.vector_Point_to_Mat(dst));
+        MatOfPoint2f src = new MatOfPoint2f(tl, tr, br, bl);
+        MatOfPoint2f dst = new MatOfPoint2f(
+            new Point(0, 0),
+            new Point(maxWidth - 1, 0),
+            new Point(maxWidth - 1, maxHeight - 1),
+            new Point(0, maxHeight - 1)
+        );
 
+        Mat M = Imgproc.getPerspectiveTransform(src, dst);
         Mat warped = new Mat();
-        Imgproc.warpPerspective(image, warped, M, new Size(maxWidth, maxHeight));
+        Imgproc.warpPerspective(orig, warped, M, new Size(maxWidth, maxHeight));
+
+        int width = Math.min(1000, warped.cols());
+        int height = width * warped.rows() / warped.cols() ;
+        Size sz = new Size(width, height);
+
+        // Grayscale, adaptive threshold, and monochromatic invert from thresh
+        Mat image = new Mat();
+        Imgproc.resize(warped, image, sz , 0, 0, Imgproc.INTER_AREA);
 
         gray = new Mat();
         Imgproc.cvtColor(warped, gray, Imgproc.COLOR_BGR2GRAY);
