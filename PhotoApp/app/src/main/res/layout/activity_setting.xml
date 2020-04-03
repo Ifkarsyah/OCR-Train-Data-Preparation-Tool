@@ -17,53 +17,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="9"
-            >
+            android:weightSum="9">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="177dp"
                 android:layout_height="wrap_content"
-                android:text="Setting-1"
                 android:layout_weight="3"
                 android:padding="10dp"
-                android:textSize="20sp"
-                android:textColor="@color/colorBlack"
+                android:text="Delete Noice"
                 android:textAlignment="center"
-                />
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
+
+            <Switch
+                android:id="@+id/settingDeleteNoise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="177dp"
                 android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:textSize="20sp"
-                android:textColor="@color/colorBlack"
-                android:textAlignment="center"
-                />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="0"
                 android:layout_weight="3"
                 android:padding="10dp"
-                android:textSize="20sp"
-                android:textColor="@color/colorBlack"
+                android:text="Adjust Border"
                 android:textAlignment="center"
-                android:inputType="numberSigned"
-                />
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="0dp"
+            <Switch
+                android:id="@+id/settingAdjustBorder"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="attr"
-                android:layout_weight="2"
-                android:padding="10dp"
-                android:textSize="20sp"
-                android:textColor="@color/colorBlack"
-                android:textAlignment="center"
-                />
+                android:layout_weight="3" />
 
         </LinearLayout>
 
@@ -82,6 +76,7 @@
         android:textAllCaps="false"
         android:textSize="20sp"
         android:id="@+id/btnAccept"
+        android:onClick="finishActivity"
 
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
