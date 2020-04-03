@@ -167,7 +167,7 @@ public class OpenCV
         while (!cnts.isEmpty()){
             MatOfPoint cnt = cnts.removeFirst();
             Rect rect = Imgproc.boundingRect(cnt);
-            Mat outMap = new Mat(mono, rect);
+            Mat outMap = new Mat(image, rect);
             Bitmap outBmp = Bitmap.createBitmap(outMap.cols(), outMap.rows(), Bitmap.Config.ARGB_8888);
             Utils.matToBitmap(outMap, outBmp);
             arrBitmap.add(outBmp);
@@ -192,13 +192,29 @@ public class OpenCV
     }
 
     public static Bitmap setColorModeBitmap(Bitmap wholeBitmap, int colorMode) {
-        // TODO asif
+        Mat orig = new Mat();
+        Bitmap bmp = wholeBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp, orig);
+
+        Bitmap returnBitmap = wholeBitmap;
+        Mat gray = new Mat();
+        Imgproc.cvtColor(orig, gray, Imgproc.COLOR_BGR2GRAY);
         switch (colorMode) {
             case 0: break; // biarin
-            case 1: break; // grayscale
-            case 2: break; // blackwhite
+            case 1: // grayscale
+                returnBitmap = Bitmap.createBitmap(gray.cols(), gray.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(gray, returnBitmap);
+                break;
+            case 2: // blackwhite
+                Mat thresh = new Mat();
+                Imgproc.adaptiveThreshold(gray, thresh, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 57, 5);
+                Mat mono = new Mat();
+                Core.bitwise_not(thresh, mono);
+                returnBitmap = Bitmap.createBitmap(mono.cols(), mono.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(mono, returnBitmap);
+                break;
         }
-        return wholeBitmap;
+        return returnBitmap;
     }
 
     public static Bitmap deleteNoise(Bitmap splittedBitmap) {
