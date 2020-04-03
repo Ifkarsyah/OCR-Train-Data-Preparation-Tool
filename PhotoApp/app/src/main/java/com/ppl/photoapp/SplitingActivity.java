@@ -164,24 +164,13 @@ public class SplitingActivity extends AppCompatActivity {
         protected ArrayList<LabeledBitmapArray> doInBackground(Bitmap... bitmaps) {
             ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
 
-            // Prepossesses
-            // TODO : change to get from user input
-
-            boolean isWannaCorrectPerspective = true;
-            if (isWannaCorrectPerspective) {
-                bitmaps[0] = OpenCV.correctBitmapPerspective(bitmaps[0]);
-            }
 
             arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]) ;
-
-            boolean isWannaDeleteNoise = true;
-            boolean isWannaAdjustPadding = true;
-
             for (int i = 0; i < arrBitmap.size(); i++){
-                if (isWannaDeleteNoise){
+                if (Global.settingDeleteNoise){
                     arrBitmap.set(i, OpenCV.deleteNoise(arrBitmap.get(i)));
                 }
-                if (isWannaAdjustPadding){
+                if (Global.settingAdjustBorder){
                     arrBitmap.set(i, OpenCV.adjustPaddingBorder(arrBitmap.get(i)));
                 }
             }
