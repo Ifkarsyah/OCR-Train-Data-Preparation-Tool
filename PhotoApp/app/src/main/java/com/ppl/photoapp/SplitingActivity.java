@@ -166,9 +166,8 @@ public class SplitingActivity extends AppCompatActivity {
 
             // Prepossesses
             int setGrayscaleOrBW = 0; // TODO : change to enum & get from user input
-            if (setGrayscaleOrBW) {
-                bitmaps[0] = OpenCV.setColorModeBitmap(bitmaps[0], setGrayscaleOrBW);
-            }
+            bitmaps[0] = OpenCV.setColorModeBitmap(bitmaps[0], setGrayscaleOrBW);
+
 
             arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]) ;
 
