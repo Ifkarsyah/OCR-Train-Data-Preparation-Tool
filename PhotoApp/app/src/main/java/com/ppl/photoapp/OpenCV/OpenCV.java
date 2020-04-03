@@ -122,8 +122,13 @@ public class OpenCV
         return arrLabeledBitmap ;
     }
 
-    public static Bitmap correctBitmapPerspective(Bitmap wholeBitmap) {
+    public static Bitmap setColorModeBitmap(Bitmap wholeBitmap, int colorMode) {
         // TODO asif
+        switch (colorMode) {
+            case 0: break; // biarin
+            case 1: break; // grayscale
+            case 2: break; // blackwhite
+        }
         return wholeBitmap;
     }
 

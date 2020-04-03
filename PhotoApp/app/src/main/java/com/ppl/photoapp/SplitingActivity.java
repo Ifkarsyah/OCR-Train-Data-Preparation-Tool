@@ -165,11 +165,9 @@ public class SplitingActivity extends AppCompatActivity {
             ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
 
             // Prepossesses
-            // TODO : change to get from user input
-
-            boolean isWannaCorrectPerspective = true;
-            if (isWannaCorrectPerspective) {
-                bitmaps[0] = OpenCV.correctBitmapPerspective(bitmaps[0]);
+            int setGrayscaleOrBW = 0; // TODO : change to enum & get from user input
+            if (setGrayscaleOrBW) {
+                bitmaps[0] = OpenCV.setColorModeBitmap(bitmaps[0], setGrayscaleOrBW);
             }
 
             arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]) ;
