@@ -141,15 +141,19 @@ public class OpenCV
         hierarchy.release();
         cnts = tmp;
 
-        // Remove non-square contours, approximated by scale
+        // Remove non-square contours, approximated by scale and approximated n_point
         tmp = new LinkedList<>();
         for (MatOfPoint cnt : cnts){
             Rect bb = Imgproc.boundingRect(cnt);
             float ratio = ((float) bb.width)/bb.height;
-            if (ratio > 0.8 && ratio < 1.2)
+
+            MatOfPoint2f c_2f = new MatOfPoint2f(cnt.toArray());
+            double peri = Imgproc.arcLength(c_2f, true);
+            MatOfPoint2f approx = new MatOfPoint2f();
+            Imgproc.approxPolyDP(c_2f, approx, 0.02 * peri, true);
+            if (approx.total() <= 6 && ratio > 0.8 && ratio < 1.2)
                 tmp.add(cnt);
         }
-
         // Sort by left to right
         cnts = tmp;
         Collections.sort(cnts, new Comparator<MatOfPoint>() {
@@ -179,12 +183,13 @@ public class OpenCV
 
     public static ArrayList<LabeledBitmapArray> mappingBitmap(ArrayList<Bitmap> arrBitmap){
         ArrayList<LabeledBitmapArray> arrLabeledBitmap = new ArrayList<>() ;
-
-        for(int i = 0 ; i < arrBitmap.size()/COUNT_IMAGES_IN_ONE_ROW ; i ++ ){
+        int sz = arrBitmap.size();
+        for(int i = 0 ; i < (sz + COUNT_IMAGES_IN_ONE_ROW - 1)/COUNT_IMAGES_IN_ONE_ROW ; i ++ ){
             Bitmap[] bitmaps = new Bitmap[COUNT_IMAGES_IN_ONE_ROW] ;
             for(int j = 0 ; j < bitmaps.length ; j ++ ){
                 int offsetRow = i*COUNT_IMAGES_IN_ONE_ROW;
-                bitmaps[j] = arrBitmap.get(offsetRow + j) ;
+                if (offsetRow + j < sz)
+                    bitmaps[j] = arrBitmap.get(offsetRow + j) ;
             }
             arrLabeledBitmap.add(new LabeledBitmapArray(bitmaps,i) );
         }
