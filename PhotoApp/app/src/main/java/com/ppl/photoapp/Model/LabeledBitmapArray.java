@@ -2,7 +2,9 @@ package com.ppl.photoapp.Model;
 
 import android.graphics.Bitmap;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LabeledBitmapArray
 {
@@ -34,16 +36,8 @@ public class LabeledBitmapArray
     }
 
     public void deleteItem(int position){
-        ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
-        for(int i = 0 ; i < bitmap.length ; i ++){
-            arrBitmap.add(bitmap[i]) ;
-        }
-
-        arrBitmap.remove(position) ;
-
-        bitmap = new Bitmap[arrBitmap.size()] ;
-        for(int i = 0 ; i < arrBitmap.size() ; i ++){
-            bitmap[i] = arrBitmap.get(i) ;
-        }
+        ArrayList<Bitmap> arrBitmap = new ArrayList<>(Arrays.asList(bitmap)) ;
+        arrBitmap.remove(position);
+        bitmap = arrBitmap.toArray(new Bitmap[arrBitmap.size()]);
     }
 }
