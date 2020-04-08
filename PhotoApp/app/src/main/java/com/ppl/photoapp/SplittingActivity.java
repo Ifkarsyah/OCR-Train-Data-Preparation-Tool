@@ -13,7 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.ppl.photoapp.Adapter.SplitingVerticalAdapter;
+import com.ppl.photoapp.Adapter.SplittingVerticalAdapter;
 import com.ppl.photoapp.Config.FormatNameFile;
 import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.Model.LabeledBitmapArray;
@@ -23,22 +23,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-public class SplitingActivity extends AppCompatActivity {
+public class SplittingActivity extends AppCompatActivity {
 
     ArrayList<LabeledBitmapArray> arrLabeledBitmap;
     RecyclerView recyclerViewVertical;
-    SplitingVerticalAdapter splitingVerticalAdapter;
+    SplittingVerticalAdapter splittingVerticalAdapter;
     ProgressDialog progressDialog ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spliting);
+        setContentView(R.layout.activity_splitting);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getSupportActionBar().setTitle("Result Spliting");
+        getSupportActionBar().setTitle("Result Splitting");
 
         progressDialog = new ProgressDialog(this) ;
-        progressDialog.setMessage("Spliting");
+        progressDialog.setMessage("Splitting");
         progressDialog.setCancelable(false) ;
 
         CheckInputBitmap() ;
@@ -51,25 +51,25 @@ public class SplitingActivity extends AppCompatActivity {
         if (arrLabeledBitmap.get(positionVertical).getBitmap().length == 0){
             arrLabeledBitmap.remove(positionVertical) ;
         }
-        UpdateSplitingView();
+        UpdateSplittingView();
     }
 
     public void DeleteRow(int position){
         arrLabeledBitmap.remove(position) ;
-        UpdateSplitingView();
+        UpdateSplittingView();
     }
 
-    public void UpdateSplitingView(){
-        splitingVerticalAdapter.notifyDataSetChanged();
+    public void UpdateSplittingView(){
+        splittingVerticalAdapter.notifyDataSetChanged();
     }
 
-    void SetSplitingView(){
-        recyclerViewVertical = findViewById(R.id.recyclerViewSplitingVertical) ;
+    void SetSplittingView(){
+        recyclerViewVertical = findViewById(R.id.recyclerViewSplittingVertical) ;
         recyclerViewVertical.setHasFixedSize(true);
         recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        splitingVerticalAdapter = new SplitingVerticalAdapter(this,arrLabeledBitmap,this) ;
-        splitingVerticalAdapter.notifyDataSetChanged();
-        recyclerViewVertical.setAdapter(splitingVerticalAdapter);
+        splittingVerticalAdapter = new SplittingVerticalAdapter(this,arrLabeledBitmap,this) ;
+        splittingVerticalAdapter.notifyDataSetChanged();
+        recyclerViewVertical.setAdapter(splittingVerticalAdapter);
     }
 
     void ButtonSave(){
@@ -81,7 +81,7 @@ public class SplitingActivity extends AppCompatActivity {
                 File folderRoot = new File(FormatNameFile.RootFolder(root) );
                 folderRoot.mkdirs() ;
 
-                new saveImages_Async(SplitingActivity.this,System.currentTimeMillis() + "",folderRoot.toString() )
+                new saveImages_Async(SplittingActivity.this,System.currentTimeMillis() + "",folderRoot.toString() )
                         .execute(arrLabeledBitmap) ;
             }
         });
@@ -192,7 +192,7 @@ public class SplitingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<LabeledBitmapArray> labeledBitmapArrays) {
             arrLabeledBitmap = labeledBitmapArrays ;
-            SetSplitingView() ;
+            SetSplittingView() ;
             //End Loading
             progressDialog.dismiss();
         }

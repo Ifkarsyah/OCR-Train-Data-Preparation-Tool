@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SplitingActivity">
+    tools:context=".SplittingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recyclerViewSplitingVertical"
+            android:id="@+id/recyclerViewSplittingVertical"
             >
 
         </android.support.v7.widget.RecyclerView>
