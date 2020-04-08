@@ -165,20 +165,17 @@ public class SplittingActivity extends AppCompatActivity {
             ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
 
             // Prepossesses
-            int setGrayscaleOrBW = 2; // TODO : change to enum & get from user input
-            bitmaps[0] = OpenCV.setColorModeBitmap(bitmaps[0], setGrayscaleOrBW);
+            int setColorMode = Global.settingColorMode;
+            bitmaps[0] = OpenCV.setColorModeBitmap(bitmaps[0], setColorMode);
 
 
-            arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]) ;
-
-            boolean isWannaDeleteNoise = true;
-            boolean isWannaAdjustPadding = true;
+            arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]);
 
             for (int i = 0; i < arrBitmap.size(); i++){
-                if (isWannaDeleteNoise){
+                if (Global.settingDeleteNoise){
                     arrBitmap.set(i, OpenCV.deleteNoise(arrBitmap.get(i)));
                 }
-                if (isWannaAdjustPadding){
+                if (Global.settingAdjustBorder){
                     arrBitmap.set(i, OpenCV.adjustPaddingBorder(arrBitmap.get(i)));
                 }
             }
