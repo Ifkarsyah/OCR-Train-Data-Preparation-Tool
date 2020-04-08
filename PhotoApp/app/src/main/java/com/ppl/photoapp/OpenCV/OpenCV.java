@@ -2,6 +2,7 @@ package com.ppl.photoapp.OpenCV;
 
 import android.graphics.Bitmap;
 
+import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.Model.LabeledBitmapArray;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import static org.opencv.core.CvType.CV_32S;
 
 public class OpenCV
 {
-    private static final int COUNT_IMAGES_IN_ONE_ROW = 14;
+    private static final int COUNT_IMAGES_IN_ONE_ROW = Global.settingCountRow;
 
     public static ArrayList<Bitmap> getArrayBitmap(Bitmap bitmapInput){
         // Input: bitmapInput == the whole image not split yet

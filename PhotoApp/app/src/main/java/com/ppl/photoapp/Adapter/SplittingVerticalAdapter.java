@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +17,19 @@ import android.widget.TextView;
 
 import com.ppl.photoapp.Model.LabeledBitmapArray;
 import com.ppl.photoapp.R;
-import com.ppl.photoapp.SplitingActivity;
+import com.ppl.photoapp.SplittingActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 
-public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVerticalAdapter.MyHolder>
-{
+public class SplittingVerticalAdapter extends RecyclerView.Adapter<SplittingVerticalAdapter.MyHolder> {
     Context context ;
     ArrayList<LabeledBitmapArray> arrLabeledBitmap;
-    SplitingActivity splitingActivity ;
+    SplittingActivity splittingActivity;
 
-    public SplitingVerticalAdapter(Context context, ArrayList<LabeledBitmapArray> arrLabeledBitmap, SplitingActivity splitingActivity) {
+    public SplittingVerticalAdapter(Context context, ArrayList<LabeledBitmapArray> arrLabeledBitmap, SplittingActivity splittingActivity) {
         this.context = context;
         this.arrLabeledBitmap = arrLabeledBitmap;
-        this.splitingActivity = splitingActivity;
+        this.splittingActivity = splittingActivity;
     }
 
     @NonNull
@@ -49,9 +46,9 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         Bitmap[] bitmaps = labeledBitmapArray.getBitmap() ;
         myHolder.tvLabel.setText(labeledBitmapArray.getLabel()+"");
 
-        SplitingHorizontalAdapter splitingHorizontalAdapter = new SplitingHorizontalAdapter(context,bitmaps,splitingActivity,i) ;
-        splitingHorizontalAdapter.notifyDataSetChanged() ;
-        myHolder.recyclerViewHorizontal.setAdapter(splitingHorizontalAdapter);
+        SplittingHorizontalAdapter splittingHorizontalAdapter = new SplittingHorizontalAdapter(context,bitmaps, splittingActivity,i) ;
+        splittingHorizontalAdapter.notifyDataSetChanged() ;
+        myHolder.recyclerViewHorizontal.setAdapter(splittingHorizontalAdapter);
 
         //Delete
         myHolder.lnDelete.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +94,7 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
     }
 
     void DeleteRow(final int position){
-        splitingActivity.DeleteRow(position);
+        splittingActivity.DeleteRow(position);
     }
 
     void ShowDialogEdit(final int position){
@@ -105,6 +102,7 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         dialog.setContentView(R.layout.dialog_put_number) ;
         dialog.setCancelable(true) ;
 
+        LinearLayout btnZero = dialog.findViewById(R.id.btnZero) ;
         LinearLayout btnOne = dialog.findViewById(R.id.btnOne) ;
         LinearLayout btnTwo = dialog.findViewById(R.id.btnTwo) ;
         LinearLayout btnThree = dialog.findViewById(R.id.btnThree) ;
@@ -114,7 +112,6 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
         LinearLayout btnSeven = dialog.findViewById(R.id.btnSeven) ;
         LinearLayout btnEight = dialog.findViewById(R.id.btnEight) ;
         LinearLayout btnNine = dialog.findViewById(R.id.btnNine) ;
-        LinearLayout btnZero = dialog.findViewById(R.id.btnZero) ;
 
         btnOne.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { ChangeLabel(position,1); dialog.dismiss();}});
         btnTwo.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { ChangeLabel(position,2);  dialog.dismiss();}});
@@ -133,7 +130,7 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
 
     void ChangeLabel(int position,int label){
         arrLabeledBitmap.get(position).setLabel(label) ;
-        splitingActivity.UpdateSplitingView();
+        splittingActivity.UpdateSplittingView();
     }
 
     @Override
@@ -151,7 +148,7 @@ public class SplitingVerticalAdapter extends RecyclerView.Adapter<SplitingVertic
             lnDelete = itemView.findViewById(R.id.lnDelete) ;
             lnEdit = itemView.findViewById(R.id.lnEdit) ;
             tvLabel = itemView.findViewById(R.id.tvLabel) ;
-            recyclerViewHorizontal = itemView.findViewById(R.id.recyclerViewSplitingHorizontal) ;
+            recyclerViewHorizontal = itemView.findViewById(R.id.recyclerViewSplittingHorizontal) ;
 
             //Set RecyclerView Horizontal
             recyclerViewHorizontal.setHasFixedSize(true);
