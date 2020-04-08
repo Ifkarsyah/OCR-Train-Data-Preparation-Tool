@@ -2,6 +2,7 @@ package com.ppl.photoapp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.ppl.photoapp.Adapter.SplittingVerticalAdapter;
 import com.ppl.photoapp.Config.FormatNameFile;
@@ -34,7 +36,7 @@ public class SplittingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splitting);
 
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("Result Splitting");
 
         progressDialog = new ProgressDialog(this) ;
@@ -43,6 +45,7 @@ public class SplittingActivity extends AppCompatActivity {
 
         CheckInputBitmap() ;
         GetLabeledBitmap() ;
+        GotoSettingAfterActivity();
         ButtonSave() ;
     }
 
@@ -199,5 +202,16 @@ public class SplittingActivity extends AppCompatActivity {
         if (Global.bitmap == null){
             finish();
         }
+    }
+
+    void GotoSettingAfterActivity(){
+        ImageView ivSetting = findViewById(R.id.ivSettingAfter) ;
+        ivSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingAfterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

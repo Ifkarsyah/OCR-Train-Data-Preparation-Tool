@@ -4,33 +4,25 @@ import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 
 import com.ppl.photoapp.GlobalVariable.Global;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingAfterActivity extends AppCompatActivity {
 
     Switch settingDeleteNoise;
     Switch settingAdjustBorder;
-    EditText settingCountRow;
-    EditText settingCountCol;
     RadioGroup settingColorMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.activity_setting_after);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getSupportActionBar().setTitle("Settings");
-
-
-
-        settingCountRow = findViewById(R.id.text_input_count_row);
-        settingCountCol = findViewById(R.id.text_input_count_col);
+        getSupportActionBar().setTitle("After Settings");
 
         settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
         settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
@@ -63,8 +55,6 @@ public class SettingActivity extends AppCompatActivity {
             case 2:
                 settingColorMode.check(R.id.rb_bw); break;
         }
-        settingCountRow.setText(Integer.toString(Global.settingCountRow));
-        settingCountCol.setText(Integer.toString(Global.settingCountCol));
         settingAdjustBorder.setChecked(Global.settingAdjustBorder);
         settingDeleteNoise.setChecked(Global.settingDeleteNoise);
     }
@@ -72,8 +62,6 @@ public class SettingActivity extends AppCompatActivity {
     public void finishActivity(View view) {
         Global.settingDeleteNoise = settingDeleteNoise.isChecked();
         Global.settingAdjustBorder = settingAdjustBorder.isChecked();
-        Global.settingCountRow = Integer.parseInt(settingCountRow.getText().toString());
-        Global.settingCountCol = Integer.parseInt(settingCountCol.getText().toString());
         finish();
     }
 }

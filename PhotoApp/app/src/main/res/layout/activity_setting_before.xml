@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingActivity">
+    tools:context=".SettingBeforeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,92 +68,6 @@
                 android:text="10"
                 android:inputType="number"
                 />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="9">
-
-            <TextView
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Delete Noise"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                 />
-
-            <Switch
-                android:id="@+id/settingDeleteNoise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="9">
-
-            <TextView
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="No border"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                />
-
-            <Switch
-                android:id="@+id/settingAdjustBorder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="9">
-
-            <TextView
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Color Mode"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                />
-
-            <RadioGroup
-                android:id = "@+id/settingColorMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <RadioButton
-                    android:id="@+id/rb_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Color" />
-                <RadioButton
-                    android:id="@+id/rb_bw"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Black White" />
-                <RadioButton
-                    android:id="@+id/rb_grayscale"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Grayscale"/>
-            </RadioGroup>
 
         </LinearLayout>
 
