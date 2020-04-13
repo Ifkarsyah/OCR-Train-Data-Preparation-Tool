@@ -1,10 +1,12 @@
 package com.ppl.photoapp.OpenCV;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.Model.LabeledBitmapArray;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +28,13 @@ import org.opencv.imgproc.Moments;
 import org.opencv.utils.Converters;
 
 import static org.opencv.core.CvType.CV_32S;
+import static org.opencv.core.CvType.CV_8UC1;
+import static org.opencv.imgproc.Imgproc.CC_STAT_LEFT;
+import static org.opencv.imgproc.Imgproc.CC_STAT_TOP;
+import static org.opencv.imgproc.Imgproc.CC_STAT_WIDTH;
+import static org.opencv.imgproc.Imgproc.CC_STAT_HEIGHT;
+import static org.opencv.imgproc.Imgproc.CC_STAT_AREA;
+
 
 public class OpenCV
 {
@@ -220,7 +229,53 @@ public class OpenCV
 
     public static Bitmap deleteNoise(Bitmap splittedBitmap) {
         // TODO alam
-        return splittedBitmap;
+
+        int imw = splittedBitmap.getWidth();
+        int imh = splittedBitmap.getHeight();
+        int area_threshold = imw*imh*Global.noiseThreshold/100;
+        Mat process_image = new Mat();
+        Bitmap bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp, process_image);
+
+        //convert to grayscale
+        Mat gray_image = new Mat();
+        Imgproc.cvtColor(process_image,gray_image,Imgproc.COLOR_BGR2GRAY);
+
+
+        Mat inverted_image = new Mat(imh,imw,CV_8UC1);
+
+        Core.bitwise_not(gray_image,inverted_image);
+
+
+        // Get stats
+        Mat stats_mat = new Mat();
+        int n_label = Imgproc.connectedComponentsWithStats(inverted_image, new Mat(), stats_mat, new Mat());
+
+        for (int image = 1; image < n_label; image++) {
+
+            int comp_x, comp_y, comp_width, comp_height;
+            // Check area, below certain threshold
+            if (stats_mat.get(image, CC_STAT_AREA)[0] < area_threshold) {
+                comp_x = (int) stats_mat.get(image, CC_STAT_LEFT)[0];
+                comp_y = (int) stats_mat.get(image, CC_STAT_TOP)[0];
+                comp_width = (int) stats_mat.get(image, CC_STAT_WIDTH)[0];
+                comp_height = (int) stats_mat.get(image, CC_STAT_HEIGHT)[0];
+                for (int y = (int) comp_y; y < comp_y + comp_height; y++) {
+                    for (int x = (int) comp_x; x < comp_x + comp_width; x++) {
+                        inverted_image.put(y, x,0);
+                    }
+                }
+            }
+        }
+
+        // Invert back
+        Core.bitwise_not(inverted_image,gray_image);
+        Utils.matToBitmap(gray_image, bmp);
+
+        return bmp;
+
+
+    //return splittedBitmap;
     }
 
     public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap) {
