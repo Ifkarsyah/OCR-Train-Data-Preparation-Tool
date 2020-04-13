@@ -31,6 +31,7 @@ public class SplittingActivity extends AppCompatActivity {
     RecyclerView recyclerViewVertical;
     SplittingVerticalAdapter splittingVerticalAdapter;
     ProgressDialog progressDialog ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,19 @@ public class SplittingActivity extends AppCompatActivity {
         GetLabeledBitmap() ;
         GotoSettingAfterActivity();
         ButtonSave() ;
+        ButtonViewAll() ;
+    }
+
+    void ButtonViewAll(){
+        Button btnViewAll = findViewById(R.id.btnViewAll) ;
+        btnViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),ViewAllActivity.class) ;
+                Global.labeledBitmap = arrLabeledBitmap ;
+                startActivity(intent);
+            }
+        });
     }
 
     public void DeleteSingleItem(final int positionVertical,final int positionHorizontal){

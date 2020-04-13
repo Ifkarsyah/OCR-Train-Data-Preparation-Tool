@@ -12,20 +12,23 @@
         android:roundIcon="@mipmap/ic_launcher_app_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LookSplitImageActivity"></activity>
+        <activity android:name=".ViewAllActivity"></activity>
+        <activity android:name=".LookSplitImageActivity" />
         <activity android:name=".SplittingActivity" />
         <activity android:name=".ResultActivity" />
         <activity android:name=".LookImageActivity" />
         <activity android:name=".SettingBeforeActivity" />
         <activity android:name=".SettingAfterActivity" />
         <activity android:name=".SplashScreenActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
