@@ -50,6 +50,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
+            android:text="View All"
+            android:drawablePadding="5dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/button_controller"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:id="@+id/btnViewAll"
+            android:drawableLeft="@drawable/ic_view_all"
+            android:layout_toLeftOf="@id/btnSave"
+            android:layout_marginRight="20dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
             android:text="Save"
             android:drawablePadding="5dp"
             android:textColor="@color/colorWhite"

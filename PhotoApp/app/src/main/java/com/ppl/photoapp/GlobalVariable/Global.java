@@ -4,6 +4,10 @@ package com.ppl.photoapp.GlobalVariable;
 import android.graphics.Bitmap;
 import android.text.Editable;
 
+import com.ppl.photoapp.Model.LabeledBitmapArray;
+
+import java.util.ArrayList;
+
 public class Global {
     public static Bitmap bitmap ;
     public static Bitmap splittedBitmap;
@@ -15,5 +19,6 @@ public class Global {
     public static int settingCountCol = 10;
     public static int settingColorMode = 2;
 
+    public static ArrayList<LabeledBitmapArray> labeledBitmap ;
 
 }
