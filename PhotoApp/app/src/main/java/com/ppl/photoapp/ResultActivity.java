@@ -3,7 +3,6 @@ package com.ppl.photoapp;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -12,15 +11,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.ppl.photoapp.Bitmap.BitmapOperation;
 import com.ppl.photoapp.GlobalVariable.Global;
 import com.theartofdev.edmodo.cropper.CropImage;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -43,7 +36,7 @@ public class ResultActivity extends AppCompatActivity {
         ivApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),SplitingActivity.class) ;
+                Intent intent = new Intent(getApplicationContext(), SplittingActivity.class) ;
                 startActivity(intent);
             }
         });

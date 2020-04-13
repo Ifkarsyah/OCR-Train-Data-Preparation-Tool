@@ -15,19 +15,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.ppl.photoapp.R;
-import com.ppl.photoapp.SplitingActivity;
+import com.ppl.photoapp.SplittingActivity;
 
-public class SplitingHorizontalAdapter extends RecyclerView.Adapter<SplitingHorizontalAdapter.MyHolder>
-{
+public class SplittingHorizontalAdapter extends RecyclerView.Adapter<SplittingHorizontalAdapter.MyHolder> {
     Context context ;
     Bitmap[] bitmaps ;
-    SplitingActivity splitingActivity ;
+    SplittingActivity splittingActivity;
     int numberOfVertical ;
 
-    public SplitingHorizontalAdapter(Context context, Bitmap[] bitmaps, SplitingActivity splitingActivity, int numberOfVertical) {
+    public SplittingHorizontalAdapter(Context context, Bitmap[] bitmaps, SplittingActivity splittingActivity, int numberOfVertical) {
         this.context = context;
         this.bitmaps = bitmaps;
-        this.splitingActivity = splitingActivity;
+        this.splittingActivity = splittingActivity;
         this.numberOfVertical = numberOfVertical;
     }
 
@@ -52,8 +51,6 @@ public class SplitingHorizontalAdapter extends RecyclerView.Adapter<SplitingHori
                 ShowDialogDelete(numberOfVertical,i) ;
             }
         });
-
-
     }
 
     void ShowDialogDelete(final int positionVertical,final int positionHorizontal){
@@ -83,7 +80,7 @@ public class SplitingHorizontalAdapter extends RecyclerView.Adapter<SplitingHori
     }
 
     void DeleteSingleItem(final int positionVertical,final int positionHorizontal){
-        splitingActivity.DeleteSingleItem(positionVertical,positionHorizontal);
+        splittingActivity.DeleteSingleItem(positionVertical,positionHorizontal);
     }
 
     @Override
