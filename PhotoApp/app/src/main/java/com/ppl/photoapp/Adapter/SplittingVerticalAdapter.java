@@ -35,7 +35,7 @@ public class SplittingVerticalAdapter extends RecyclerView.Adapter<SplittingVert
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_row_spliting,viewGroup,false) ;
+        View view = LayoutInflater.from(context).inflate(R.layout.item_row_spliting_new,viewGroup,false) ;
         return new MyHolder(view);
     }
 
@@ -44,7 +44,7 @@ public class SplittingVerticalAdapter extends RecyclerView.Adapter<SplittingVert
 
         final LabeledBitmapArray labeledBitmapArray = arrLabeledBitmap.get(i) ;
         Bitmap[] bitmaps = labeledBitmapArray.getBitmap() ;
-        myHolder.tvLabel.setText(labeledBitmapArray.getLabel()+"");
+        myHolder.tvLabel.setText("Label : " + labeledBitmapArray.getLabel()+"");
 
         SplittingHorizontalAdapter splittingHorizontalAdapter = new SplittingHorizontalAdapter(context,bitmaps, splittingActivity,i) ;
         splittingHorizontalAdapter.notifyDataSetChanged() ;
