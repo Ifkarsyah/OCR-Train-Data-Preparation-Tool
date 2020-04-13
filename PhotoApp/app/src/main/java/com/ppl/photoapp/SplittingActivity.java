@@ -195,6 +195,12 @@ public class SplittingActivity extends AppCompatActivity {
                 if (Global.settingAdjustBorder){
                     arrBitmap.set(i, OpenCV.adjustPaddingBorder(arrBitmap.get(i)));
                 }
+                if (Global.settingErosion){
+                    arrBitmap.set(i,OpenCV.erode(arrBitmap.get(i)));
+                }
+                if (Global.settingDilation){
+                    arrBitmap.set(i,OpenCV.dilate(arrBitmap.get(i)));
+                }
             }
 
 
