@@ -24,6 +24,16 @@ public class Global {
     // is considered as a noise and will be obliterated
     public static int noiseThreshold = 5;
 
+    // Erosion factor
+    // Make image thinner
+    public static boolean settingErosion = false;
+    public static int erosionFactor = 4;
+
+    // Dilate factor
+    // Make image bolder
+    public static  boolean settingDilation = false;
+    public static int dilationFactor = 4;
+
     public static ArrayList<LabeledBitmapArray> labeledBitmap ;
 
 }

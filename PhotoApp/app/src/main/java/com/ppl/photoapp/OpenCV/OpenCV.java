@@ -274,8 +274,70 @@ public class OpenCV
 
         return bmp;
 
+    }
 
-    //return splittedBitmap;
+    public static Bitmap dilate(Bitmap splittedBitmap){
+
+        Mat dilated_image, image, grayscale_image;
+        Mat kernel;
+        Bitmap bmp;
+
+        // Convert bitmap image to grayscale mat
+        image = new Mat();
+        bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp,image);
+
+
+        grayscale_image = new Mat();
+        Imgproc.cvtColor(image,grayscale_image,Imgproc.COLOR_BGR2GRAY);
+
+        // Invert image
+        Core.bitwise_not(grayscale_image,grayscale_image);
+
+        // Dilation
+        dilated_image = new Mat();
+        final Size kernel_size = new Size(Global.dilationFactor,Global.dilationFactor);
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernel_size);
+        Imgproc.morphologyEx(grayscale_image,dilated_image,Imgproc.MORPH_DILATE,kernel);
+
+
+        // Invert again
+        Core.bitwise_not(dilated_image,image);
+        Utils.matToBitmap(image,bmp);
+
+        return bmp;
+    }
+
+    public static Bitmap erode(Bitmap splittedBitmap){
+
+        Mat eroded_image, image, grayscale_image;
+        Mat kernel;
+        Bitmap bmp;
+
+        // Convert bitmap image to grayscale mat
+        image = new Mat();
+        bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp,image);
+
+
+        grayscale_image = new Mat();
+        Imgproc.cvtColor(image,grayscale_image,Imgproc.COLOR_BGR2GRAY);
+
+        // Invert image
+        Core.bitwise_not(grayscale_image,grayscale_image);
+
+        // Erosion
+        eroded_image = new Mat();
+        final Size kernel_size = new Size(Global.erosionFactor,Global.erosionFactor);
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernel_size);
+        Imgproc.morphologyEx(grayscale_image,eroded_image,Imgproc.MORPH_ERODE,kernel);
+
+
+        // Invert again
+        Core.bitwise_not(eroded_image,image);
+        Utils.matToBitmap(image,bmp);
+
+        return bmp;
     }
 
     public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap) {
