@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.CameraFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_settings"
+            android:scaleType="fitXY"
+            android:layout_margin="10dp"
+            android:id="@+id/ivSetting"
+            android:clickable="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/strTakePicture"
+                android:drawablePadding="5dp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_controller"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:id="@+id/btnTakePicture"
+                />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+
+</FrameLayout>

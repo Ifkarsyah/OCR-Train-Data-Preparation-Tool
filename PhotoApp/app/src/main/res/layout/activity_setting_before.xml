@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingBeforeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Count Row"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                />
+
+            <EditText
+                android:id="@+id/text_input_count_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="14"
+                android:inputType="number"
+                />
+
+        </LinearLayout>
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:weightSum="9">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="250dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="10dp"-->
+<!--                android:text="Count Column"-->
+<!--                android:textColor="@color/colorBlack"-->
+<!--                android:textSize="20sp"-->
+<!--                />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/text_input_count_col"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="35dp"-->
+<!--                android:layout_weight="2"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:text="10"-->
+<!--                android:inputType="number"-->
+<!--                />-->
+
+<!--        </LinearLayout>-->
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Apply"
+        android:drawableLeft="@drawable/ic_check"
+        android:drawableStart="@drawable/ic_check"
+        android:drawablePadding="5dp"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/button_controller"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:id="@+id/btnAccept"
+        android:onClick="finishActivity"
+
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp" />
+
+</RelativeLayout>
