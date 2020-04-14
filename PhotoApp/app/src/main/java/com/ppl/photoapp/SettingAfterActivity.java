@@ -73,10 +73,17 @@ public class SettingAfterActivity extends AppCompatActivity {
             case 2:
                 settingColorMode.check(R.id.rb_bw); break;
         }
-        settingAdjustBorder.setChecked(Global.settingAdjustBorder);
         settingDeleteNoise.setChecked(Global.settingDeleteNoise);
+        etNoiseThreshold.setText(Integer.toString(Global.noiseThreshold));
+
+        settingAdjustBorder.setChecked(Global.settingAdjustBorder);
+        etPaddingSize.setText(Integer.toString(Global.paddingSize));
+
         settingDilate.setChecked(Global.settingDilation);
+        etDilationFactor.setText(Integer.toString(Global.dilationFactor));
+
         settingErode.setChecked(Global.settingErosion);
+        etErosionFactor.setText(Integer.toString(Global.erosionFactor));
     }
 
     public void finishActivity(View view) {
