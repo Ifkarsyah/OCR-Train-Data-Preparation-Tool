@@ -38,9 +38,11 @@ import static org.opencv.imgproc.Imgproc.CC_STAT_AREA;
 
 public class OpenCV
 {
+    public static final String TAG = "OpenCV.java";
     private static final int COUNT_IMAGES_IN_ONE_ROW = Global.settingCountRow;
 
     public static ArrayList<Bitmap> getArrayBitmap(Bitmap bitmapInput){
+        Log.d(TAG, "getArrayBitmap");
         // Input: bitmapInput == the whole image not split yet
 
         // Load image
@@ -192,6 +194,7 @@ public class OpenCV
     }
 
     public static ArrayList<LabeledBitmapArray> mappingBitmap(ArrayList<Bitmap> arrBitmap){
+        Log.d(TAG, "mappingBitmap");
         ArrayList<LabeledBitmapArray> arrLabeledBitmap = new ArrayList<>() ;
         int sz = arrBitmap.size();
         for(int i = 0 ; i < (sz + COUNT_IMAGES_IN_ONE_ROW - 1)/COUNT_IMAGES_IN_ONE_ROW ; i ++ ){
@@ -207,6 +210,7 @@ public class OpenCV
     }
 
     public static Bitmap setColorModeBitmap(Bitmap wholeBitmap, int colorMode) {
+        Log.d(TAG, "setColorModeBitmap");
         Mat orig = new Mat();
         Bitmap bmp = wholeBitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp, orig);
@@ -233,6 +237,7 @@ public class OpenCV
     }
 
     public static Bitmap deleteNoise(Bitmap splittedBitmap) {
+        Log.d(TAG, "deleteNoise");
         // TODO alam
 
         int imw = splittedBitmap.getWidth();
@@ -282,6 +287,7 @@ public class OpenCV
     }
 
     public static Bitmap dilate(Bitmap splittedBitmap){
+        Log.d(TAG, "dilate");
 
         Mat dilated_image, image, grayscale_image;
         Mat kernel;
@@ -314,6 +320,7 @@ public class OpenCV
     }
 
     public static Bitmap erode(Bitmap splittedBitmap){
+        Log.d(TAG, "erode");
 
         Mat eroded_image, image, grayscale_image;
         Mat kernel;

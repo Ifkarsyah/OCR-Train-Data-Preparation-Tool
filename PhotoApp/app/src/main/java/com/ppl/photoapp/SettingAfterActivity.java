@@ -14,6 +14,8 @@ public class SettingAfterActivity extends AppCompatActivity {
 
     Switch settingDeleteNoise;
     Switch settingAdjustBorder;
+    Switch settingDilate;
+    Switch settingErode;
     RadioGroup settingColorMode;
 
     @Override
@@ -27,6 +29,8 @@ public class SettingAfterActivity extends AppCompatActivity {
         settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
         settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
         settingColorMode = findViewById(R.id.settingColorMode);
+        settingDilate = findViewById(R.id.settingDilate);
+        settingErode = findViewById(R.id.settingErode);
 
         getCurrentValue();
         settingColorMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -55,12 +59,16 @@ public class SettingAfterActivity extends AppCompatActivity {
         }
         settingAdjustBorder.setChecked(Global.settingAdjustBorder);
         settingDeleteNoise.setChecked(Global.settingDeleteNoise);
+        settingDilate.setChecked(Global.settingDilation);
+        settingErode.setChecked(Global.settingErosion);
     }
 
     public void finishActivity(View view) {
         Global.isSettingsChanged = true;
         Global.settingDeleteNoise = settingDeleteNoise.isChecked();
         Global.settingAdjustBorder = settingAdjustBorder.isChecked();
+        Global.settingDilation = settingDilate.isChecked();
+        Global.settingErosion = settingErode.isChecked();
         finish();
     }
 }
