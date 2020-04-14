@@ -26,8 +26,6 @@ public class SettingBeforeActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("Settings");
 
-
-
         settingCountRow = findViewById(R.id.text_input_count_row);
         settingCountCol = findViewById(R.id.text_input_count_col);
 

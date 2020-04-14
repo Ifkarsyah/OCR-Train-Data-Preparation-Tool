@@ -26,11 +26,9 @@ public class SettingAfterActivity extends AppCompatActivity {
 
         settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
         settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
-
         settingColorMode = findViewById(R.id.settingColorMode);
 
         getCurrentValue();
-
         settingColorMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
@@ -60,6 +58,7 @@ public class SettingAfterActivity extends AppCompatActivity {
     }
 
     public void finishActivity(View view) {
+        Global.isSettingsChanged = true;
         Global.settingDeleteNoise = settingDeleteNoise.isChecked();
         Global.settingAdjustBorder = settingAdjustBorder.isChecked();
         finish();
