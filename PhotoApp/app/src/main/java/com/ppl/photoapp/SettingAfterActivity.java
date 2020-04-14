@@ -12,10 +12,18 @@ import com.ppl.photoapp.GlobalVariable.Global;
 
 public class SettingAfterActivity extends AppCompatActivity {
 
-    Switch settingDeleteNoise;
     Switch settingAdjustBorder;
+    EditText etPaddingSize;
+
+    Switch settingDeleteNoise;
+    EditText etNoiseThreshold;
+
     Switch settingDilate;
+    EditText etDilationFactor;
+
     Switch settingErode;
+    EditText etErosionFactor;
+
     RadioGroup settingColorMode;
 
     @Override
@@ -26,11 +34,19 @@ public class SettingAfterActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("After Settings");
 
-        settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
-        settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
         settingColorMode = findViewById(R.id.settingColorMode);
+
+        settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
+        etPaddingSize = findViewById(R.id.settingPaddingSize);
+
+        settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
+        etNoiseThreshold = findViewById(R.id.settingNoiseThreshold);
+
         settingDilate = findViewById(R.id.settingDilate);
+        etDilationFactor = findViewById(R.id.settingDilateFactor);
+
         settingErode = findViewById(R.id.settingErode);
+        etErosionFactor = findViewById(R.id.settingErodeFactor);
 
         getCurrentValue();
         settingColorMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -65,10 +81,20 @@ public class SettingAfterActivity extends AppCompatActivity {
 
     public void finishActivity(View view) {
         Global.isSettingsChanged = true;
-        Global.settingDeleteNoise = settingDeleteNoise.isChecked();
+
+
         Global.settingAdjustBorder = settingAdjustBorder.isChecked();
+        Global.paddingSize = Integer.parseInt(etPaddingSize.getText().toString());
+
+        Global.settingDeleteNoise = settingDeleteNoise.isChecked();
+        Global.noiseThreshold = Integer.parseInt(etNoiseThreshold.getText().toString());
+
         Global.settingDilation = settingDilate.isChecked();
+        Global.dilationFactor = Integer.parseInt(etDilationFactor.getText().toString());
+
         Global.settingErosion = settingErode.isChecked();
+        Global.erosionFactor = Integer.parseInt(etErosionFactor.getText().toString());
+
         finish();
     }
 }

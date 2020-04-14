@@ -236,13 +236,13 @@ public class OpenCV
         return returnBitmap;
     }
 
-    public static Bitmap deleteNoise(Bitmap splittedBitmap) {
+    public static Bitmap deleteNoise(Bitmap splittedBitmap, int noiseThreshold) {
         Log.d(TAG, "deleteNoise");
         // TODO alam
 
         int imw = splittedBitmap.getWidth();
         int imh = splittedBitmap.getHeight();
-        int area_threshold = imw*imh*Global.noiseThreshold/100;
+        int area_threshold = imw*imh*noiseThreshold/100;
         Mat process_image = new Mat();
         Bitmap bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp, process_image);
@@ -286,7 +286,7 @@ public class OpenCV
 
     }
 
-    public static Bitmap dilate(Bitmap splittedBitmap){
+    public static Bitmap dilate(Bitmap splittedBitmap, int dilationFactor){
         Log.d(TAG, "dilate");
 
         Mat dilated_image, image, grayscale_image;
@@ -307,7 +307,7 @@ public class OpenCV
 
         // Dilation
         dilated_image = new Mat();
-        final Size kernel_size = new Size(Global.dilationFactor,Global.dilationFactor);
+        final Size kernel_size = new Size(dilationFactor, dilationFactor);
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernel_size);
         Imgproc.morphologyEx(grayscale_image,dilated_image,Imgproc.MORPH_DILATE,kernel);
 
@@ -319,7 +319,7 @@ public class OpenCV
         return bmp;
     }
 
-    public static Bitmap erode(Bitmap splittedBitmap){
+    public static Bitmap erode(Bitmap splittedBitmap, int erosionFactor){
         Log.d(TAG, "erode");
 
         Mat eroded_image, image, grayscale_image;
@@ -340,7 +340,7 @@ public class OpenCV
 
         // Erosion
         eroded_image = new Mat();
-        final Size kernel_size = new Size(Global.erosionFactor,Global.erosionFactor);
+        final Size kernel_size = new Size(erosionFactor,erosionFactor);
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernel_size);
         Imgproc.morphologyEx(grayscale_image,eroded_image,Imgproc.MORPH_ERODE,kernel);
 
@@ -352,7 +352,7 @@ public class OpenCV
         return bmp;
     }
 
-    public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap) {
+    public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap, int paddingSize) {
         // TODO suhailie
         return splittedBitmap;
     }

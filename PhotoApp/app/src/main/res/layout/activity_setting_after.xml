@@ -63,16 +63,28 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Delete Noise"
+                android:text="No border"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 />
 
             <Switch
-                android:id="@+id/settingDeleteNoise"
+                android:id="@+id/settingAdjustBorder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3" />
+
+            <EditText
+                android:id="@+id/settingPaddingSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="1"
+                android:inputType="number"
+                />
 
         </LinearLayout>
 
@@ -86,16 +98,28 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="No border"
+                android:text="Delete Noise"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 />
 
             <Switch
-                android:id="@+id/settingAdjustBorder"
+                android:id="@+id/settingDeleteNoise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3" />
+
+            <EditText
+                android:id="@+id/settingNoiseThreshold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="5"
+                android:inputType="number"
+                />
 
         </LinearLayout>
 
@@ -120,6 +144,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3" />
 
+            <EditText
+                android:id="@+id/settingDilateFactor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="4"
+                android:inputType="number"
+                />
+
         </LinearLayout>
 
         <LinearLayout
@@ -142,6 +178,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3" />
+
+            <EditText
+                android:id="@+id/settingErodeFactor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="4"
+                android:inputType="number"
+                />
 
         </LinearLayout>
 

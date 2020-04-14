@@ -218,10 +218,10 @@ public class SplittingActivity extends AppCompatActivity {
                     Bitmap currentBitmap = bitmaps[i];
                     if (currentBitmap == null) continue;
                     currentBitmap = OpenCV.setColorModeBitmap(currentBitmap, Global.settingColorMode);
-                    currentBitmap = Global.settingDeleteNoise ? OpenCV.deleteNoise(currentBitmap) : currentBitmap;
-                    currentBitmap = Global.settingAdjustBorder ? OpenCV.adjustPaddingBorder(currentBitmap) : currentBitmap;
-                    currentBitmap = Global.settingDilation ? OpenCV.dilate(currentBitmap) : currentBitmap;
-                    currentBitmap = Global.settingErosion ? OpenCV.erode(currentBitmap) : currentBitmap;
+                    currentBitmap = Global.settingDeleteNoise ? OpenCV.deleteNoise(currentBitmap, Global.noiseThreshold) : currentBitmap;
+                    currentBitmap = Global.settingAdjustBorder ? OpenCV.adjustPaddingBorder(currentBitmap, Global.paddingSize) : currentBitmap;
+                    currentBitmap = Global.settingDilation ? OpenCV.dilate(currentBitmap, Global.dilationFactor) : currentBitmap;
+                    currentBitmap = Global.settingErosion ? OpenCV.erode(currentBitmap, Global.erosionFactor) : currentBitmap;
                     tmpBitmaps[i] = currentBitmap;
                 }
                 arrLabeledBitmap.add(new LabeledBitmapArray(tmpBitmaps, tmp.getLabel()));
