@@ -160,7 +160,11 @@ public class SplittingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             progressDialogSave.dismiss();
-            finish();
+//            finish();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
     }
 
