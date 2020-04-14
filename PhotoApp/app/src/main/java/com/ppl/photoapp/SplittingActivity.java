@@ -193,6 +193,23 @@ public class SplittingActivity extends AppCompatActivity {
             // Preprocesses
             int setColorMode = Global.settingColorMode;
             arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]);
+
+            for (int i = 0; i < arrBitmap.size(); i++){
+                if (Global.settingDeleteNoise){
+                    arrBitmap.set(i, OpenCV.deleteNoise(arrBitmap.get(i)));
+                }
+                if (Global.settingAdjustBorder){
+                    arrBitmap.set(i, OpenCV.adjustPaddingBorder(arrBitmap.get(i)));
+                }
+                if (Global.settingErosion){
+                    arrBitmap.set(i,OpenCV.erode(arrBitmap.get(i)));
+                }
+                if (Global.settingDilation){
+                    arrBitmap.set(i,OpenCV.dilate(arrBitmap.get(i)));
+                }
+            }
+
+
             ArrayList<LabeledBitmapArray> temp = OpenCV.mappingBitmap(arrBitmap) ;
             return temp;
         }
