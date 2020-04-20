@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ppl.photoapp.Adapter.GalleryAdapter;
@@ -42,6 +43,7 @@ public class GalleryFragment extends Fragment {
     RecyclerView recyclerViewGallery ;
     GalleryAdapter galleryAdapter ;
     ArrayList<String> arrPath ;
+    TextView tvCountImages ;
 
     LinearLayout lnBeforePermission ;
     LinearLayout lnAfterPermission ;
@@ -78,6 +80,7 @@ public class GalleryFragment extends Fragment {
         recyclerViewGallery = view.findViewById(R.id.recyclerViewGallery) ;
         recyclerViewNumber = view.findViewById(R.id.recyclerViewNumber) ;
         btnPermissionRequest = view.findViewById(R.id.btnPermissionRequest) ;
+        tvCountImages = view.findViewById(R.id.tvCountImages) ;
     }
 
     void CheckPermissions(){
@@ -164,6 +167,7 @@ public class GalleryFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<String> strings) {
             arrPath = strings ;
+            tvCountImages.setText("All : " + arrPath.size() + " Item");
             SetArrPathToRecyclerView() ;
         }
     }
@@ -185,6 +189,7 @@ public class GalleryFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<String> strings) {
             arrPath = strings ;
+            tvCountImages.setText("Label-" + numberAdapter.checkedNumber + " : " + arrPath.size() + " Item");
             SetArrPathToRecyclerView() ;
         }
     }
