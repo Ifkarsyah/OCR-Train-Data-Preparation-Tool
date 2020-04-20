@@ -45,6 +45,15 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvCountImages"
+            android:textSize="15sp"
+            android:padding="10dp"
+            android:textColor="@color/colorBlack"
+            android:text="All : 0 Item"
+            />
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
