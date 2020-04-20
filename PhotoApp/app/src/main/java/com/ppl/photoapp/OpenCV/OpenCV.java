@@ -1,6 +1,7 @@
 package com.ppl.photoapp.OpenCV;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.Model.LabeledBitmapArray;
@@ -12,6 +13,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -25,7 +27,16 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.opencv.utils.Converters;
 
+import static android.support.constraint.Constraints.TAG;
 import static org.opencv.core.CvType.CV_32S;
+import static org.opencv.core.CvType.CV_8UC1;
+import static org.opencv.imgproc.Imgproc.ADAPTIVE_THRESH_MEAN_C;
+import static org.opencv.imgproc.Imgproc.CC_STAT_AREA;
+import static org.opencv.imgproc.Imgproc.CC_STAT_HEIGHT;
+import static org.opencv.imgproc.Imgproc.CC_STAT_LEFT;
+import static org.opencv.imgproc.Imgproc.CC_STAT_TOP;
+import static org.opencv.imgproc.Imgproc.CC_STAT_WIDTH;
+import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 
 public class OpenCV
 {
@@ -224,7 +235,90 @@ public class OpenCV
     }
 
     public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap) {
-        // TODO suhailie
-        return splittedBitmap;
+
+        if (OpenCVLoader.initDebug()) {
+            int wCleanBorder = 5;
+            int hCleanBorder = 5;
+            int imw = splittedBitmap.getWidth();
+            int imh = splittedBitmap.getHeight();
+            int area_threshold = imw * imh * 5 / 100;
+
+            Mat process_img = new Mat();
+            Bitmap bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            Utils.bitmapToMat(bmp, process_img);
+
+            //Convert to grayscale
+            Imgproc.cvtColor(process_img, process_img, Imgproc.COLOR_BGR2GRAY);
+
+            //If the image is in color mode or grayscale
+            if (Global.settingColorMode == 0 | Global.settingColorMode == 1) {
+                Imgproc.adaptiveThreshold(process_img, process_img, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 57, 5);
+                Core.bitwise_not(process_img, process_img);
+            }
+
+            //Invert image
+            Core.bitwise_not(process_img, process_img);
+
+            Scalar s1 = new Scalar(255, 255, 255);
+            Core.bitwise_not(process_img, process_img);
+
+            //cleaning border
+            for (int i=0; i<process_img.cols(); i++) {
+                for (int j=0; j<hCleanBorder; j++) {
+                    process_img.put(j, i, 0);
+                }
+                for (int k=process_img.rows()-1; k>(process_img.rows()-hCleanBorder); k--) {
+                    process_img.put(k, i, 0);
+                }
+                if (i>=0 && i<wCleanBorder) {
+                    for (int x = 0; x < process_img.rows(); x++) {
+                        process_img.put(x,i,0);
+                    }
+                }
+                if (i<=process_img.cols()-1 && i>process_img.cols()-wCleanBorder) {
+                    for (int y=0; y<process_img.rows(); y++) {
+                        process_img.put(y,i,0);
+                    }
+                }
+            }
+
+            List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+            Mat hierarchy = new Mat();
+            Imgproc.findContours(process_img, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+            Rect position = new Rect();
+
+            MatOfPoint2f approxCurve = new MatOfPoint2f();
+            MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];
+            for (int i=0; i<contours.size(); i++) {
+
+                MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(i).toArray() );
+
+                double approxDistance = Imgproc.arcLength(contour2f, true)*0.01;
+                Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
+
+                //Convert back to MatOfPoint
+                MatOfPoint points = new MatOfPoint( approxCurve.toArray() );
+
+                // Get bounding rect of contour
+                position = Imgproc.boundingRect(points);
+            }
+
+            Bitmap croppedBitmap = Bitmap.createBitmap(bmp, position.x - Global.paddingSize, position.y - Global.paddingSize, position.width + 2*Global.paddingSize, position.height + 2*Global.paddingSize);
+
+            //Create white border around image
+            Mat withBorder = new Mat();
+            Utils.bitmapToMat(croppedBitmap, withBorder);
+            Core.copyMakeBorder(withBorder, withBorder, Global.paddingSize, Global.paddingSize,Global.paddingSize,Global.paddingSize, Core.BORDER_CONSTANT, s1);
+
+            Bitmap borderedBitmap = Bitmap.createBitmap(withBorder.cols(), withBorder.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(withBorder, borderedBitmap);
+
+            return borderedBitmap;
+
+        } else {
+            Log.d(TAG, "not loaded");
+            return splittedBitmap;
+        }
+
     }
 }

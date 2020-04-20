@@ -14,10 +14,12 @@ public class Global {
     public static final String INTENT_PATH_BITMAP = "INTENT_PATH_BITMAP";
 
     public static boolean settingDeleteNoise = false;
-    public static boolean settingAdjustBorder = false;
+    public static boolean settingAdjustBorder = true;
     public static int settingCountRow = 14;
     public static int settingCountCol = 10;
     public static int settingColorMode = 2;
+
+    public static int paddingSize = 10;
 
     public static ArrayList<LabeledBitmapArray> labeledBitmap ;
 
