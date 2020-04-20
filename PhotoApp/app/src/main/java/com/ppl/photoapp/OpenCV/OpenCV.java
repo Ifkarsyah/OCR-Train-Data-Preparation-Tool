@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.Model.LabeledBitmapArray;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,9 +41,11 @@ import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 
 public class OpenCV
 {
+    public static final String TAG = "OpenCV.java";
     private static final int COUNT_IMAGES_IN_ONE_ROW = Global.settingCountRow;
 
     public static ArrayList<Bitmap> getArrayBitmap(Bitmap bitmapInput){
+        Log.d(TAG, "getArrayBitmap");
         // Input: bitmapInput == the whole image not split yet
 
         // Load image
@@ -153,15 +156,19 @@ public class OpenCV
         hierarchy.release();
         cnts = tmp;
 
-        // Remove non-square contours, approximated by scale
+        // Remove non-square contours, approximated by scale and approximated n_point
         tmp = new LinkedList<>();
         for (MatOfPoint cnt : cnts){
             Rect bb = Imgproc.boundingRect(cnt);
             float ratio = ((float) bb.width)/bb.height;
-            if (ratio > 0.8 && ratio < 1.2)
+
+            MatOfPoint2f c_2f = new MatOfPoint2f(cnt.toArray());
+            double peri = Imgproc.arcLength(c_2f, true);
+            MatOfPoint2f approx = new MatOfPoint2f();
+            Imgproc.approxPolyDP(c_2f, approx, 0.02 * peri, true);
+            if (approx.total() <= 6 && ratio > 0.8 && ratio < 1.2)
                 tmp.add(cnt);
         }
-
         // Sort by left to right
         cnts = tmp;
         Collections.sort(cnts, new Comparator<MatOfPoint>() {
@@ -190,13 +197,15 @@ public class OpenCV
     }
 
     public static ArrayList<LabeledBitmapArray> mappingBitmap(ArrayList<Bitmap> arrBitmap){
+        Log.d(TAG, "mappingBitmap");
         ArrayList<LabeledBitmapArray> arrLabeledBitmap = new ArrayList<>() ;
-
-        for(int i = 0 ; i < arrBitmap.size()/COUNT_IMAGES_IN_ONE_ROW ; i ++ ){
+        int sz = arrBitmap.size();
+        for(int i = 0 ; i < (sz + COUNT_IMAGES_IN_ONE_ROW - 1)/COUNT_IMAGES_IN_ONE_ROW ; i ++ ){
             Bitmap[] bitmaps = new Bitmap[COUNT_IMAGES_IN_ONE_ROW] ;
             for(int j = 0 ; j < bitmaps.length ; j ++ ){
                 int offsetRow = i*COUNT_IMAGES_IN_ONE_ROW;
-                bitmaps[j] = arrBitmap.get(offsetRow + j) ;
+                if (offsetRow + j < sz)
+                    bitmaps[j] = arrBitmap.get(offsetRow + j) ;
             }
             arrLabeledBitmap.add(new LabeledBitmapArray(bitmaps,i) );
         }
@@ -204,6 +213,7 @@ public class OpenCV
     }
 
     public static Bitmap setColorModeBitmap(Bitmap wholeBitmap, int colorMode) {
+        Log.d(TAG, "setColorModeBitmap");
         Mat orig = new Mat();
         Bitmap bmp = wholeBitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp, orig);
@@ -229,12 +239,123 @@ public class OpenCV
         return returnBitmap;
     }
 
-    public static Bitmap deleteNoise(Bitmap splittedBitmap) {
+    public static Bitmap deleteNoise(Bitmap splittedBitmap, int noiseThreshold) {
+        Log.d(TAG, "deleteNoise");
         // TODO alam
-        return splittedBitmap;
+
+        int imw = splittedBitmap.getWidth();
+        int imh = splittedBitmap.getHeight();
+        int area_threshold = imw*imh*noiseThreshold/100;
+        Mat process_image = new Mat();
+        Bitmap bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp, process_image);
+
+        //convert to grayscale
+        Mat gray_image = new Mat();
+        Imgproc.cvtColor(process_image,gray_image,Imgproc.COLOR_BGR2GRAY);
+
+
+        Mat inverted_image = new Mat(imh,imw,CV_8UC1);
+
+        Core.bitwise_not(gray_image,inverted_image);
+
+
+        // Get stats
+        Mat stats_mat = new Mat();
+        int n_label = Imgproc.connectedComponentsWithStats(inverted_image, new Mat(), stats_mat, new Mat());
+
+        for (int image = 1; image < n_label; image++) {
+
+            int comp_x, comp_y, comp_width, comp_height;
+            // Check area, below certain threshold
+            if (stats_mat.get(image, CC_STAT_AREA)[0] < area_threshold) {
+                comp_x = (int) stats_mat.get(image, CC_STAT_LEFT)[0];
+                comp_y = (int) stats_mat.get(image, CC_STAT_TOP)[0];
+                comp_width = (int) stats_mat.get(image, CC_STAT_WIDTH)[0];
+                comp_height = (int) stats_mat.get(image, CC_STAT_HEIGHT)[0];
+                for (int y = (int) comp_y; y < comp_y + comp_height; y++) {
+                    for (int x = (int) comp_x; x < comp_x + comp_width; x++) {
+                        inverted_image.put(y, x,0);
+                    }
+                }
+            }
+        }
+
+        // Invert back
+        Core.bitwise_not(inverted_image,gray_image);
+        Utils.matToBitmap(gray_image, bmp);
+
+        return bmp;
+
     }
 
-    public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap) {
+    public static Bitmap dilate(Bitmap splittedBitmap, int dilationFactor){
+        Log.d(TAG, "dilate");
+
+        Mat dilated_image, image, grayscale_image;
+        Mat kernel;
+        Bitmap bmp;
+
+        // Convert bitmap image to grayscale mat
+        image = new Mat();
+        bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp,image);
+
+
+        grayscale_image = new Mat();
+        Imgproc.cvtColor(image,grayscale_image,Imgproc.COLOR_BGR2GRAY);
+
+        // Invert image
+        Core.bitwise_not(grayscale_image,grayscale_image);
+
+        // Dilation
+        dilated_image = new Mat();
+        final Size kernel_size = new Size(dilationFactor, dilationFactor);
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernel_size);
+        Imgproc.morphologyEx(grayscale_image,dilated_image,Imgproc.MORPH_DILATE,kernel);
+
+
+        // Invert again
+        Core.bitwise_not(dilated_image,image);
+        Utils.matToBitmap(image,bmp);
+
+        return bmp;
+    }
+
+    public static Bitmap erode(Bitmap splittedBitmap, int erosionFactor){
+        Log.d(TAG, "erode");
+
+        Mat eroded_image, image, grayscale_image;
+        Mat kernel;
+        Bitmap bmp;
+
+        // Convert bitmap image to grayscale mat
+        image = new Mat();
+        bmp = splittedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp,image);
+
+
+        grayscale_image = new Mat();
+        Imgproc.cvtColor(image,grayscale_image,Imgproc.COLOR_BGR2GRAY);
+
+        // Invert image
+        Core.bitwise_not(grayscale_image,grayscale_image);
+
+        // Erosion
+        eroded_image = new Mat();
+        final Size kernel_size = new Size(erosionFactor,erosionFactor);
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernel_size);
+        Imgproc.morphologyEx(grayscale_image,eroded_image,Imgproc.MORPH_ERODE,kernel);
+
+
+        // Invert again
+        Core.bitwise_not(eroded_image,image);
+        Utils.matToBitmap(image,bmp);
+
+        return bmp;
+    }
+
+    public static Bitmap adjustPaddingBorder(Bitmap splittedBitmap, int paddingSize) {
 
         if (OpenCVLoader.initDebug()) {
             int wCleanBorder = 5;
@@ -303,12 +424,12 @@ public class OpenCV
                 position = Imgproc.boundingRect(points);
             }
 
-            Bitmap croppedBitmap = Bitmap.createBitmap(bmp, position.x - Global.paddingSize, position.y - Global.paddingSize, position.width + 2*Global.paddingSize, position.height + 2*Global.paddingSize);
+            Bitmap croppedBitmap = Bitmap.createBitmap(bmp, position.x - paddingSize, position.y - paddingSize, position.width + 2*paddingSize, position.height + 2*paddingSize);
 
             //Create white border around image
             Mat withBorder = new Mat();
             Utils.bitmapToMat(croppedBitmap, withBorder);
-            Core.copyMakeBorder(withBorder, withBorder, Global.paddingSize, Global.paddingSize,Global.paddingSize,Global.paddingSize, Core.BORDER_CONSTANT, s1);
+            Core.copyMakeBorder(withBorder, withBorder, paddingSize, paddingSize,paddingSize,paddingSize, Core.BORDER_CONSTANT, s1);
 
             Bitmap borderedBitmap = Bitmap.createBitmap(withBorder.cols(), withBorder.rows(), Bitmap.Config.ARGB_8888);
             Utils.matToBitmap(withBorder, borderedBitmap);
@@ -319,6 +440,5 @@ public class OpenCV
             Log.d(TAG, "not loaded");
             return splittedBitmap;
         }
-
     }
 }

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,11 +27,13 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class SplittingActivity extends AppCompatActivity {
+    public static String TAG = "SplittingActivity.java";
 
+    ArrayList<LabeledBitmapArray> arrLabeledBitmapInitial;
     ArrayList<LabeledBitmapArray> arrLabeledBitmap;
     RecyclerView recyclerViewVertical;
     SplittingVerticalAdapter splittingVerticalAdapter;
-    ProgressDialog progressDialog ;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,15 @@ public class SplittingActivity extends AppCompatActivity {
         GotoSettingAfterActivity();
         ButtonSave() ;
         ButtonViewAll() ;
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (Global.isSettingsChanged){
+            Global.isSettingsChanged = false;
+            new updateSettings_Async().execute();
+        }
     }
 
     void ButtonViewAll(){
@@ -148,7 +160,11 @@ public class SplittingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             progressDialogSave.dismiss();
-            finish();
+//            finish();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
     }
 
@@ -166,8 +182,8 @@ public class SplittingActivity extends AppCompatActivity {
     }
 
     void GetLabeledBitmap(){
-        arrLabeledBitmap = new ArrayList<>() ;
-        new openCV_Async().execute(Global.bitmap) ;
+        arrLabeledBitmap = new ArrayList<>();
+        new openCV_Async().execute(Global.bitmap);
     }
 
     private class openCV_Async extends AsyncTask<Bitmap, Integer, ArrayList<LabeledBitmapArray>> {
@@ -179,36 +195,47 @@ public class SplittingActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<LabeledBitmapArray> doInBackground(Bitmap... bitmaps) {
-            ArrayList<Bitmap> arrBitmap = new ArrayList<>() ;
-
-            // Prepossesses
-            int setColorMode = Global.settingColorMode;
-            bitmaps[0] = OpenCV.setColorModeBitmap(bitmaps[0], setColorMode);
-
-
-            arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]);
-
-            for (int i = 0; i < arrBitmap.size(); i++){
-                if (Global.settingDeleteNoise){
-                    arrBitmap.set(i, OpenCV.deleteNoise(arrBitmap.get(i)));
-                }
-                if (Global.settingAdjustBorder){
-                    arrBitmap.set(i, OpenCV.adjustPaddingBorder(arrBitmap.get(i)));
-                }
-            }
-
-
-
-            ArrayList<LabeledBitmapArray> temp = OpenCV.mappingBitmap(arrBitmap) ;
-            return temp;
+            ArrayList<Bitmap> arrBitmap = OpenCV.getArrayBitmap(bitmaps[0]);
+            return OpenCV.mappingBitmap(arrBitmap);
         }
 
         @Override
         protected void onPostExecute(ArrayList<LabeledBitmapArray> labeledBitmapArrays) {
-            arrLabeledBitmap = labeledBitmapArrays ;
+            arrLabeledBitmap = new ArrayList<>();
+            arrLabeledBitmapInitial = labeledBitmapArrays;
+            new updateSettings_Async().execute();
             SetSplittingView() ;
             //End Loading
             progressDialog.dismiss();
+        }
+    }
+
+    private class updateSettings_Async extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params){
+            Log.d(TAG, "updateSettings_Async");
+            arrLabeledBitmap.clear();
+            for (LabeledBitmapArray tmp : arrLabeledBitmapInitial){
+                Bitmap[] bitmaps = tmp.getBitmap();
+                Bitmap[] tmpBitmaps = new Bitmap[bitmaps.length];
+                for (int i = 0; i < bitmaps.length; i++) {
+                    Bitmap currentBitmap = bitmaps[i];
+                    if (currentBitmap == null) continue;
+                    currentBitmap = OpenCV.setColorModeBitmap(currentBitmap, Global.settingColorMode);
+                    currentBitmap = Global.settingDeleteNoise ? OpenCV.deleteNoise(currentBitmap, Global.noiseThreshold) : currentBitmap;
+                    currentBitmap = Global.settingAdjustBorder ? OpenCV.adjustPaddingBorder(currentBitmap, Global.paddingSize) : currentBitmap;
+                    currentBitmap = Global.settingDilation ? OpenCV.dilate(currentBitmap, Global.dilationFactor) : currentBitmap;
+                    currentBitmap = Global.settingErosion ? OpenCV.erode(currentBitmap, Global.erosionFactor) : currentBitmap;
+                    tmpBitmaps[i] = currentBitmap;
+                }
+                arrLabeledBitmap.add(new LabeledBitmapArray(tmpBitmaps, tmp.getLabel()));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param){
+            splittingVerticalAdapter.notifyDataSetChanged();
         }
     }
 

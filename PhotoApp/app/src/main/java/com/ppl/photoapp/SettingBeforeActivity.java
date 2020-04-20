@@ -12,11 +12,8 @@ import com.ppl.photoapp.GlobalVariable.Global;
 
 public class SettingBeforeActivity extends AppCompatActivity {
 
-    Switch settingDeleteNoise;
-    Switch settingAdjustBorder;
     EditText settingCountRow;
-    EditText settingCountCol;
-    RadioGroup settingColorMode;
+//    EditText settingCountCol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,22 +23,20 @@ public class SettingBeforeActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("Settings");
 
-
-
         settingCountRow = findViewById(R.id.text_input_count_row);
-        settingCountCol = findViewById(R.id.text_input_count_col);
+//        settingCountCol = findViewById(R.id.text_input_count_col);
 
         getCurrentValue();
     }
 
     private void getCurrentValue() {
         settingCountRow.setText(Integer.toString(Global.settingCountRow));
-        settingCountCol.setText(Integer.toString(Global.settingCountCol));
+//        settingCountCol.setText(Integer.toString(Global.settingCountCol));
     }
 
     public void finishActivity(View view) {
         Global.settingCountRow = Integer.parseInt(settingCountRow.getText().toString());
-        Global.settingCountCol = Integer.parseInt(settingCountCol.getText().toString());
+//        Global.settingCountCol = Integer.parseInt(settingCountCol.getText().toString());
         finish();
     }
 }

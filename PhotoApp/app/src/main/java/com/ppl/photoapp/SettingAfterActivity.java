@@ -12,8 +12,18 @@ import com.ppl.photoapp.GlobalVariable.Global;
 
 public class SettingAfterActivity extends AppCompatActivity {
 
-    Switch settingDeleteNoise;
     Switch settingAdjustBorder;
+    EditText etPaddingSize;
+
+    Switch settingDeleteNoise;
+    EditText etNoiseThreshold;
+
+    Switch settingDilate;
+    EditText etDilationFactor;
+
+    Switch settingErode;
+    EditText etErosionFactor;
+
     RadioGroup settingColorMode;
 
     @Override
@@ -24,13 +34,21 @@ public class SettingAfterActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("After Settings");
 
-        settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
-        settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
-
         settingColorMode = findViewById(R.id.settingColorMode);
 
-        getCurrentValue();
+        settingAdjustBorder = findViewById(R.id.settingAdjustBorder);
+        etPaddingSize = findViewById(R.id.settingPaddingSize);
 
+        settingDeleteNoise = findViewById(R.id.settingDeleteNoise);
+        etNoiseThreshold = findViewById(R.id.settingNoiseThreshold);
+
+        settingDilate = findViewById(R.id.settingDilate);
+        etDilationFactor = findViewById(R.id.settingDilateFactor);
+
+        settingErode = findViewById(R.id.settingErode);
+        etErosionFactor = findViewById(R.id.settingErodeFactor);
+
+        getCurrentValue();
         settingColorMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
@@ -55,13 +73,35 @@ public class SettingAfterActivity extends AppCompatActivity {
             case 2:
                 settingColorMode.check(R.id.rb_bw); break;
         }
-        settingAdjustBorder.setChecked(Global.settingAdjustBorder);
         settingDeleteNoise.setChecked(Global.settingDeleteNoise);
+        etNoiseThreshold.setText(Integer.toString(Global.noiseThreshold));
+
+        settingAdjustBorder.setChecked(Global.settingAdjustBorder);
+        etPaddingSize.setText(Integer.toString(Global.paddingSize));
+
+        settingDilate.setChecked(Global.settingDilation);
+        etDilationFactor.setText(Integer.toString(Global.dilationFactor));
+
+        settingErode.setChecked(Global.settingErosion);
+        etErosionFactor.setText(Integer.toString(Global.erosionFactor));
     }
 
     public void finishActivity(View view) {
-        Global.settingDeleteNoise = settingDeleteNoise.isChecked();
+        Global.isSettingsChanged = true;
+
+
         Global.settingAdjustBorder = settingAdjustBorder.isChecked();
+        Global.paddingSize = Integer.parseInt(etPaddingSize.getText().toString());
+
+        Global.settingDeleteNoise = settingDeleteNoise.isChecked();
+        Global.noiseThreshold = Integer.parseInt(etNoiseThreshold.getText().toString());
+
+        Global.settingDilation = settingDilate.isChecked();
+        Global.dilationFactor = Integer.parseInt(etDilationFactor.getText().toString());
+
+        Global.settingErosion = settingErode.isChecked();
+        Global.erosionFactor = Integer.parseInt(etErosionFactor.getText().toString());
+
         finish();
     }
 }
