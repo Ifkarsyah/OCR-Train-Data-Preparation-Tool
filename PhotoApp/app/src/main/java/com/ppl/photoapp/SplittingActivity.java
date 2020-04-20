@@ -1,10 +1,13 @@
 package com.ppl.photoapp;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ppl.photoapp.Adapter.SplittingVerticalAdapter;
 import com.ppl.photoapp.Config.FormatNameFile;
@@ -139,8 +143,20 @@ public class SplittingActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(ArrayList<LabeledBitmapArray>... arrayLists) {
             ArrayList<LabeledBitmapArray> arrLabeledBitmap_local = arrayLists[0] ;
+
+            arrayCountSave = new ArrayList<>() ;
+            arrayCountSave.clear();
+            totalSave = 0 ;
+            for(int i = 0 ; i <= 9 ; i ++ ){
+                arrayCountSave.add(0) ;
+            }
+
             for(int i = 0 ; i < arrLabeledBitmap_local.size() ; i ++ ){
                 int label = arrLabeledBitmap_local.get(i).getLabel() ;
+
+                arrayCountSave.set(label,arrLabeledBitmap_local.get(i).getBitmap().length ) ;
+                totalSave += arrLabeledBitmap_local.get(i).getBitmap().length ;
+
                 File subFolder = new File(folderRoot + "/" + FormatNameFile.SubFolder(label) );
                 subFolder.mkdirs() ;
                 for(int j = 0 ; j < arrLabeledBitmap_local.get(i).getBitmap().length ; j ++){
@@ -161,11 +177,55 @@ public class SplittingActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             progressDialogSave.dismiss();
 //            finish();
-
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            DialogSuccessSave() ;
+//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
         }
+    }
+
+    ArrayList<Integer> arrayCountSave ;
+    int totalSave ;
+    void DialogSuccessSave(){
+        final Dialog dialog = new Dialog(this) ;
+        dialog.setContentView(R.layout.dialog_save_image) ;
+        dialog.setCancelable(true) ;
+
+        TextView tvDigit_0 = dialog.findViewById(R.id.tvDigit_0) ;
+        TextView tvDigit_1 = dialog.findViewById(R.id.tvDigit_1) ;
+        TextView tvDigit_2 = dialog.findViewById(R.id.tvDigit_2) ;
+        TextView tvDigit_3 = dialog.findViewById(R.id.tvDigit_3) ;
+        TextView tvDigit_4 = dialog.findViewById(R.id.tvDigit_4) ;
+        TextView tvDigit_5 = dialog.findViewById(R.id.tvDigit_5) ;
+        TextView tvDigit_6 = dialog.findViewById(R.id.tvDigit_6) ;
+        TextView tvDigit_7 = dialog.findViewById(R.id.tvDigit_7) ;
+        TextView tvDigit_8 = dialog.findViewById(R.id.tvDigit_8) ;
+        TextView tvDigit_9 = dialog.findViewById(R.id.tvDigit_9) ;
+        TextView tvDigit_total = dialog.findViewById(R.id.tvDigit_Total) ;
+
+        tvDigit_0.setText("Digit 0 : " + arrayCountSave.get(0) + " images");
+        tvDigit_1.setText("Digit 1 : " + arrayCountSave.get(1) + " images");
+        tvDigit_2.setText("Digit 2 : " + arrayCountSave.get(2) + " images");
+        tvDigit_3.setText("Digit 3 : " + arrayCountSave.get(3) + " images");
+        tvDigit_4.setText("Digit 4 : " + arrayCountSave.get(4) + " images");
+        tvDigit_5.setText("Digit 5 : " + arrayCountSave.get(5) + " images");
+        tvDigit_6.setText("Digit 6 : " + arrayCountSave.get(6) + " images");
+        tvDigit_7.setText("Digit 7 : " + arrayCountSave.get(7) + " images");
+        tvDigit_8.setText("Digit 8 : " + arrayCountSave.get(8) + " images");
+        tvDigit_9.setText("Digit 9 : " + arrayCountSave.get(9) + " images");
+        tvDigit_total.setText("Total : " + totalSave + " images");
+
+        Button btnAccept = dialog.findViewById(R.id.btnAccept) ;
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)) ;
+        dialog.show();
     }
 
     void SaveSingleImage(File file,Bitmap imagePhoto)
