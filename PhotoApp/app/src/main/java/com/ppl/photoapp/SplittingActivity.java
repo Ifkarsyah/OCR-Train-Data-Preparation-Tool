@@ -44,7 +44,6 @@ public class SplittingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splitting);
 
-//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setTitle("Result Splitting");
 
         progressDialog = new ProgressDialog(this) ;
@@ -176,11 +175,7 @@ public class SplittingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             progressDialogSave.dismiss();
-//            finish();
             DialogSuccessSave() ;
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
         }
     }
 
@@ -189,7 +184,7 @@ public class SplittingActivity extends AppCompatActivity {
     void DialogSuccessSave(){
         final Dialog dialog = new Dialog(this) ;
         dialog.setContentView(R.layout.dialog_save_image) ;
-        dialog.setCancelable(true) ;
+        dialog.setCancelable(false) ;
 
         TextView tvDigit_0 = dialog.findViewById(R.id.tvDigit_0) ;
         TextView tvDigit_1 = dialog.findViewById(R.id.tvDigit_1) ;
@@ -219,7 +214,37 @@ public class SplittingActivity extends AppCompatActivity {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DialogUseThisPictureAgain() ;
+                dialog.dismiss();
+            }
+        });
 
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)) ;
+        dialog.show();
+    }
+
+    void DialogUseThisPictureAgain(){
+        final Dialog dialog = new Dialog(this) ;
+        dialog.setContentView(R.layout.dialog_use_this_picture_again) ;
+        dialog.setCancelable(true) ;
+
+        Button btnAccept = dialog.findViewById(R.id.btnAccept) ;
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                dialog.dismiss();
+            }
+        });
+
+        Button btnCancel = dialog.findViewById(R.id.btnCancel) ;
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
                 dialog.dismiss();
             }
         });
