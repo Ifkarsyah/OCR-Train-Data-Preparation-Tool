@@ -20,8 +20,6 @@ public class Global {
     public static int settingCountCol = 10;
     public static int settingColorMode = 0;
 
-    public static int paddingSize = 1;
-
     // Percentage of connected component area considered as noisy
     // Example, 5 means that any connectedComponent cover less than 5 % of bitmap area
     // is considered as a noise and will be obliterated
