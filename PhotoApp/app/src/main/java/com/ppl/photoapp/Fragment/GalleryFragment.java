@@ -24,9 +24,11 @@ import com.ppl.photoapp.Adapter.GalleryAdapter;
 import com.ppl.photoapp.Adapter.NumberAdapter;
 import com.ppl.photoapp.Config.Config;
 import com.ppl.photoapp.Config.FormatNameFile;
+import com.ppl.photoapp.GlobalVariable.Global;
 import com.ppl.photoapp.R;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
@@ -250,7 +252,17 @@ public class GalleryFragment extends Fragment {
         String root = Environment.getExternalStorageDirectory().getAbsolutePath();
         File folder = new File(FormatNameFile.RootFolder(root));
         folder.mkdirs();
-        return folder ;
+        File[] subFolderRoot = folder.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String name) {
+                return name.equals(Global.pixelWidth + "x" + Global.pixelHeight);
+            }
+        });
+        if (subFolderRoot.length == 0) {
+            return folder;
+        } else {
+            return subFolderRoot[0];
+        }
     }
 
     void SetArrPathToRecyclerView(){
