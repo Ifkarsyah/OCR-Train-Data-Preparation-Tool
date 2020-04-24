@@ -15,12 +15,10 @@ public class Global {
 
     public static boolean isSettingsChanged = false;
     public static boolean settingDeleteNoise = false;
-    public static boolean settingAdjustBorder = false;
+    public static boolean settingAdjustBorder = true;
     public static int settingCountRow = 14;
     public static int settingCountCol = 10;
     public static int settingColorMode = 0;
-
-    public static int paddingSize = 1;
 
     // Percentage of connected component area considered as noisy
     // Example, 5 means that any connectedComponent cover less than 5 % of bitmap area
@@ -38,6 +36,8 @@ public class Global {
     public static int dilationFactor = 4;
 
 
+
+    public static int paddingSize = 10;
 
     public static ArrayList<LabeledBitmapArray> labeledBitmap ;
 
