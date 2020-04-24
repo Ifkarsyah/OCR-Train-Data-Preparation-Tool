@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SettingBeforeActivity extends AppCompatActivity {
 
-    EditText settingCountRow;
+    EditText settingCountRow,settingPixelWidth,settingPixelHeigth;
 //    EditText settingCountCol;
 
     @Override
@@ -38,6 +38,8 @@ public class SettingBeforeActivity extends AppCompatActivity {
 
         settingCountRow = findViewById(R.id.text_input_count_row);
 //        settingCountCol = findViewById(R.id.text_input_count_col);
+        settingPixelWidth = findViewById(R.id.text_input_pixel_width);
+        settingPixelHeigth = findViewById(R.id.text_input_pixel_heigth);
 
         getCurrentValue();
 
@@ -48,12 +50,14 @@ public class SettingBeforeActivity extends AppCompatActivity {
 
     private void getCurrentValue() {
         settingCountRow.setText(Integer.toString(Global.settingCountRow));
-//        settingCountCol.setText(Integer.toString(Global.settingCountCol));
+        settingPixelHeigth.setText(Integer.toString(Global.pixelHeight));
+        settingPixelWidth.setText(Integer.toString(Global.pixelWidth));
     }
 
     public void finishActivity(View view) {
         Global.settingCountRow = Integer.parseInt(settingCountRow.getText().toString());
-//        Global.settingCountCol = Integer.parseInt(settingCountCol.getText().toString());
+        Global.pixelHeight = Integer.parseInt(settingPixelHeigth.getText().toString());
+        Global.pixelWidth = Integer.parseInt(settingPixelWidth.getText().toString());
         finish();
     }
 

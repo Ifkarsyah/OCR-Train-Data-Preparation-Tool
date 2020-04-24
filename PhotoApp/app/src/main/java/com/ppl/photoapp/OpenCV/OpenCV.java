@@ -453,4 +453,35 @@ public class OpenCV
             return splittedBitmap;
         }
     }
+
+
+    public static Bitmap rescaleImage(Bitmap bitmap){
+
+        try {
+            Bitmap edited_bitmap = bitmap.copy(Bitmap.Config.ARGB_8888,true);
+            Mat rescale_target = new Mat();
+            Mat rescale_orig = new Mat();
+            Size rescale_size = new Size(Global.pixelWidth,Global.pixelHeight);
+
+            Bitmap target_bitmap = Bitmap.createBitmap(Global.pixelWidth,Global.pixelHeight, Bitmap.Config.ARGB_8888);
+
+            Utils.bitmapToMat(edited_bitmap,rescale_orig);
+            if(rescale_orig.size().area()>rescale_size.area()){
+                // downscale
+                Imgproc.resize(rescale_orig,rescale_target,rescale_size,0,0,Imgproc.INTER_AREA);
+            } else {
+                // upscale
+                Imgproc.resize(rescale_orig,rescale_target,rescale_size,0,0,Imgproc.INTER_CUBIC);
+            }
+
+            // Convert to bitmap back
+            Utils.matToBitmap(rescale_target,target_bitmap);
+            return target_bitmap;
+
+        } catch (Exception e){
+            Log.e("Rescale Error : ", e.getMessage());
+
+            return bitmap;
+        }
+    }
 }
