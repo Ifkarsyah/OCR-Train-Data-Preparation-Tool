@@ -13,12 +13,19 @@ public class Global {
     public static Bitmap splittedBitmap;
     public static final String INTENT_PATH_BITMAP = "INTENT_PATH_BITMAP";
 
+
+
     public static boolean isSettingsChanged = false;
     public static boolean settingDeleteNoise = false;
-    public static boolean settingAdjustBorder = true;
+    public static boolean settingAdjustBorder = false;
     public static int settingCountRow = 14;
     public static int settingCountCol = 10;
     public static int settingColorMode = 0;
+
+    // For dataset-separation
+    // For now dataset change is made by typing the appropiate pixel dimensions
+    public static int pixelWidth = 100;
+    public static int pixelHeight = 100;
 
     // Percentage of connected component area considered as noisy
     // Example, 5 means that any connectedComponent cover less than 5 % of bitmap area

@@ -149,19 +149,22 @@ public class SplittingActivity extends AppCompatActivity {
             for(int i = 0 ; i <= 9 ; i ++ ){
                 arrayCountSave.add(0) ;
             }
-
+            String dataset_path = Integer.toString(Global.pixelWidth) + "x" + Integer.toString(Global.pixelHeight);
             for(int i = 0 ; i < arrLabeledBitmap_local.size() ; i ++ ){
                 int label = arrLabeledBitmap_local.get(i).getLabel() ;
 
                 arrayCountSave.set(label,arrLabeledBitmap_local.get(i).getBitmap().length ) ;
                 totalSave += arrLabeledBitmap_local.get(i).getBitmap().length ;
 
-                File subFolder = new File(folderRoot + "/" + FormatNameFile.SubFolder(label) );
+                File subFolder = new File(folderRoot + "/" +dataset_path + "/" + FormatNameFile.SubFolder(label) );
                 subFolder.mkdirs() ;
                 for(int j = 0 ; j < arrLabeledBitmap_local.get(i).getBitmap().length ; j ++){
                     Bitmap bitmap = arrLabeledBitmap_local.get(i).getBitmap()[j] ;
-                    File file = new File(subFolder,FormatNameFile.NamingSavedFile(date,j)) ;
-                    SaveSingleImage(file,bitmap);
+                    if(bitmap!=null){
+                        File file = new File(subFolder,FormatNameFile.NamingSavedFile(date,j)) ;
+                        SaveSingleImage(file,bitmap);
+                    }
+
                 }
             }
             return null;
@@ -258,7 +261,10 @@ public class SplittingActivity extends AppCompatActivity {
         if (file.exists ()) file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            imagePhoto.compress(Bitmap.CompressFormat.JPEG, 90, out);
+
+            // Rescale image first
+            Bitmap rescaledImage = OpenCV.rescaleImage(imagePhoto);
+            rescaledImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
         } catch (Exception e) {
@@ -311,6 +317,9 @@ public class SplittingActivity extends AppCompatActivity {
                     currentBitmap = Global.settingAdjustBorder ? OpenCV.adjustPaddingBorder(currentBitmap, Global.paddingSize) : currentBitmap;
                     currentBitmap = Global.settingDilation ? OpenCV.dilate(currentBitmap, Global.dilationFactor) : currentBitmap;
                     currentBitmap = Global.settingErosion ? OpenCV.erode(currentBitmap, Global.erosionFactor) : currentBitmap;
+                    // Rescale
+                    // TODO : Move to when image is going to be saved
+                    // currentBitmap = OpenCV.rescaleImage(currentBitmap);
                     tmpBitmaps[i] = currentBitmap;
                 }
                 arrLabeledBitmap.add(new LabeledBitmapArray(tmpBitmaps, tmp.getLabel()));
