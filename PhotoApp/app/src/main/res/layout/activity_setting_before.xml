@@ -25,53 +25,84 @@
                 android:padding="10dp"
                 android:text="Count Row"
                 android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/text_input_count_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="35dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:layout_gravity="center"
-                android:text="14"
                 android:inputType="number"
+                android:text="14" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:weightSum="9">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Download Sample Paper"
+                android:textColor="@color/colorBlack"
+                android:textSize="24sp"
+                android:gravity="center"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:text="Paper 5x5"
+                android:drawablePadding="5dp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_controller"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:id="@+id/ivDownloadPaper55"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:text="Paper 10x10"
+                android:drawablePadding="5dp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_controller"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:id="@+id/ivDownloadPaper1010"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:text="Paper 14x14"
+                android:drawablePadding="5dp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_controller"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:id="@+id/ivDownloadPaper1414"
                 />
 
         </LinearLayout>
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:weightSum="9">-->
-
-<!--            <TextView-->
-<!--                android:layout_width="250dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:padding="10dp"-->
-<!--                android:text="Count Column"-->
-<!--                android:textColor="@color/colorBlack"-->
-<!--                android:textSize="20sp"-->
-<!--                />-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/text_input_count_col"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginLeft="35dp"-->
-<!--                android:layout_weight="2"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:text="10"-->
-<!--                android:inputType="number"-->
-<!--                />-->
-
-<!--        </LinearLayout>-->
-
     </LinearLayout>
+
 
     <Button
         android:layout_width="wrap_content"
