@@ -424,19 +424,7 @@ public class OpenCV
                 position = Imgproc.boundingRect(points);
             }
 
-            Bitmap croppedBitmap = null;
-            if (position.x - Global.paddingSize >= wCleanBorder && position.y - Global.paddingSize >= wCleanBorder) {
-                croppedBitmap = Bitmap.createBitmap(bmp, position.x - Global.paddingSize, position.y - Global.paddingSize, position.width + Global.paddingSize, position.height + Global.paddingSize);
-            } else if (position.x - Global.paddingSize < wCleanBorder || position.y - Global.paddingSize < wCleanBorder){
-                int padSize;
-                if (position.x >= position.y) {
-                    padSize = position.y - wCleanBorder;
-                    croppedBitmap = Bitmap.createBitmap(bmp, position.x - padSize, position.y - padSize, position.width + padSize, position.height + padSize);
-                } else {
-                    padSize = position.x - wCleanBorder;
-                    croppedBitmap = Bitmap.createBitmap(bmp, position.x - padSize, position.y - padSize, position.width + padSize, position.height + padSize);
-                }
-            }
+            Bitmap croppedBitmap = Bitmap.createBitmap(bmp, position.x - paddingSize, position.y - paddingSize, position.width + 2*paddingSize, position.height + 2*paddingSize);
 
             //Create white border around image
             Mat withBorder = new Mat();
