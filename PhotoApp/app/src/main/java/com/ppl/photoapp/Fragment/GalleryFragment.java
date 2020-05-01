@@ -30,6 +30,7 @@ import com.ppl.photoapp.R;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GalleryFragment extends Fragment {
 
@@ -60,71 +61,48 @@ public class GalleryFragment extends Fragment {
         AssignWidget(view);
         CheckPermissions() ;
         ButtonPermissionRequest() ;
+
         SetFilterNumberView() ;
         SetGallery() ;
-
 
         return view ;
     }
 
-    void ButtonPermissionRequest(){
-        btnPermissionRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RequestPermission();
-            }
-        });
-    }
+    //NEW METHOD
+    ArrayList<String> getAllImages(){
+        //DEBUG
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File folder = new File(FormatNameFile.RootFolder(root));
+        folder.mkdirs();
 
-    void AssignWidget(View view){
-        lnBeforePermission = view.findViewById(R.id.lnBeforePermission) ;
-        lnAfterPermission = view.findViewById(R.id.lnAfterPermission) ;
-        recyclerViewGallery = view.findViewById(R.id.recyclerViewGallery) ;
-        recyclerViewNumber = view.findViewById(R.id.recyclerViewNumber) ;
-        btnPermissionRequest = view.findViewById(R.id.btnPermissionRequest) ;
-        tvCountImages = view.findViewById(R.id.tvCountImages) ;
-    }
+        ///All Children
+        ArrayList<String> arr = new ArrayList<>() ;
+        File listPixelFolder[] = folder.listFiles();
+        try {
+            for(int i = 0 ; i < listPixelFolder.length ; i ++ ){
+                File pixelFolder = listPixelFolder[i] ;
+                File listNumFolder[] = pixelFolder.listFiles() ;
 
-    void CheckPermissions(){
-        if ((getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) || (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED))
-        {
-            lnBeforePermission.setVisibility(View.VISIBLE) ;
-            lnAfterPermission.setVisibility(View.GONE);
-        }
-        else {
-            lnBeforePermission.setVisibility(View.GONE);
-            lnAfterPermission.setVisibility(View.VISIBLE);
-        }
-    }
+                for(int j = 0 ; j < listNumFolder.length ; j ++ ){
+                    File numFolder = listNumFolder[j] ;
+                    File listImages[] = numFolder.listFiles() ;
 
-    void RequestPermission(){
-        if ((getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) || (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED))
-        {
-            String[] permission = {Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE} ;
-            requestPermissions(permission,PERMISSION_CODE) ;
-        }
-    }
+                    for (int k = 0 ; k < listImages.length ; k ++ ){
+                        String path = listImages[k].toString() ;
+                        String extentsionFile = path.substring(path.lastIndexOf("."));
+                        if (FormatNameFile.isAvaiableExtension(extentsionFile))
+                        {
+                            arr.add(path);
+                        }
+                    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case PERMISSION_CODE : {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    lnBeforePermission.setVisibility(View.GONE);
-                    lnAfterPermission.setVisibility(View.VISIBLE);
-                    SetGallery() ;
-                }else {
-                    Toast.makeText(getActivity(),"Permission Denied",Toast.LENGTH_LONG).show();
                 }
             }
-        }
-    }
+        }catch (Exception e){
 
-    public void SetCheckedNumber(){
-        SharedPreferences pref = getContext().getSharedPreferences(Config.PREF_GALLERY, 0) ;
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(Config.KEY_GALLERY_NUMBER,numberAdapter.checkedNumber) ;
-        editor.commit() ;
+        }
+
+        return arr ;
     }
 
     void SetFilterNumberView(){
@@ -137,7 +115,6 @@ public class GalleryFragment extends Fragment {
         numberAdapter.notifyDataSetChanged();
         recyclerViewNumber.setAdapter(numberAdapter);
     }
-
     void SetGallery(){
         recyclerViewGallery.setHasFixedSize(true);
         recyclerViewGallery.setLayoutManager(new GridLayoutManager(getActivity(),3));
@@ -147,7 +124,12 @@ public class GalleryFragment extends Fragment {
             new getImagesPath_Async().execute(getFolderPath()) ;
         }
     }
-
+    public void SetCheckedNumber(){
+        SharedPreferences pref = getContext().getSharedPreferences(Config.PREF_GALLERY, 0) ;
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(Config.KEY_GALLERY_NUMBER,numberAdapter.checkedNumber) ;
+        editor.commit() ;
+    }
     public void NumberChanged(){
         if (numberAdapter.checkedNumber != -1) {
             new getImagesPathByNumber_Async(numberAdapter.checkedNumber).execute(getFolderPath()) ;
@@ -155,11 +137,9 @@ public class GalleryFragment extends Fragment {
             new getImagesPath_Async().execute(getFolderPath()) ;
         }
     }
-
     public void UpdateRecylerViewNumber(){
         numberAdapter.notifyDataSetChanged();
     }
-
     private class getImagesPath_Async extends AsyncTask<File, Integer, ArrayList<String>> {
         @Override
         protected ArrayList<String> doInBackground(File... files) {
@@ -173,7 +153,6 @@ public class GalleryFragment extends Fragment {
             SetArrPathToRecyclerView() ;
         }
     }
-
     private class getImagesPathByNumber_Async extends AsyncTask<File, Integer, ArrayList<String>> {
         int number ;
 
@@ -195,7 +174,11 @@ public class GalleryFragment extends Fragment {
             SetArrPathToRecyclerView() ;
         }
     }
-
+    void SetArrPathToRecyclerView(){
+        galleryAdapter = new GalleryAdapter(getContext(),arrPath,this) ;
+        galleryAdapter.notifyDataSetChanged();
+        recyclerViewGallery.setAdapter(galleryAdapter);
+    }
     public ArrayList<String> getImagesPathByNumber(int number,ArrayList<String> arrAllPath){
         ArrayList<String> outputArrayList = new ArrayList<>() ;
         for (int i = 0 ; i < arrAllPath.size() ; i ++){
@@ -206,30 +189,29 @@ public class GalleryFragment extends Fragment {
         }
         return outputArrayList ;
     }
-
     public ArrayList<String> getImagesPath(File dir) {
-        ArrayList<String> fileList = new ArrayList<>() ;
-        File listFile[] = dir.listFiles();
-        ArrayList<File> fileArrayList = mapDirFiles(listFile) ;
-
-        if (fileArrayList != null && fileArrayList.size() > 0) {
-            for (File file : fileArrayList) {
-                try {
-                    String path = file.toString() ;
-                    String extentsionFile = path.substring(path.lastIndexOf("."));
-                    if (FormatNameFile.isAvaiableExtension(extentsionFile))
-                    {
-                        fileList.add(path);
-                    }
-                }catch (Exception e){
-
-                }
-
-            }
-        }
-        return fileList;
+        return getAllImages();
+//        ArrayList<String> fileList = new ArrayList<>() ;
+//        File listFile[] = dir.listFiles();
+//        ArrayList<File> fileArrayList = mapDirFiles(listFile) ;
+//
+//        if (fileArrayList != null && fileArrayList.size() > 0) {
+//            for (File file : fileArrayList) {
+//                try {
+//                    String path = file.toString() ;
+//                    String extentsionFile = path.substring(path.lastIndexOf("."));
+//                    if (FormatNameFile.isAvaiableExtension(extentsionFile))
+//                    {
+//                        fileList.add(path);
+//                    }
+//                }catch (Exception e){
+//
+//                }
+//
+//            }
+//        }
+//        return fileList;
     }
-
     ArrayList<File> mapDirFiles(File listFile[]){
         ArrayList<File> fileArrayList = new ArrayList<>() ;
         if (listFile != null){
@@ -247,7 +229,6 @@ public class GalleryFragment extends Fragment {
         }
         return fileArrayList ;
     }
-
     File getFolderPath(){
         String root = Environment.getExternalStorageDirectory().getAbsolutePath();
         File folder = new File(FormatNameFile.RootFolder(root));
@@ -265,9 +246,53 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-    void SetArrPathToRecyclerView(){
-        galleryAdapter = new GalleryAdapter(getContext(),arrPath,this) ;
-        galleryAdapter.notifyDataSetChanged();
-        recyclerViewGallery.setAdapter(galleryAdapter);
+    //Permission Widget
+    void ButtonPermissionRequest(){
+        btnPermissionRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestPermission();
+            }
+        });
+    }
+    void AssignWidget(View view){
+        lnBeforePermission = view.findViewById(R.id.lnBeforePermission) ;
+        lnAfterPermission = view.findViewById(R.id.lnAfterPermission) ;
+        recyclerViewGallery = view.findViewById(R.id.recyclerViewGallery) ;
+        recyclerViewNumber = view.findViewById(R.id.recyclerViewNumber) ;
+        btnPermissionRequest = view.findViewById(R.id.btnPermissionRequest) ;
+        tvCountImages = view.findViewById(R.id.tvCountImages) ;
+    }
+    void CheckPermissions(){
+        if ((getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) || (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED))
+        {
+            lnBeforePermission.setVisibility(View.VISIBLE) ;
+            lnAfterPermission.setVisibility(View.GONE);
+        }
+        else {
+            lnBeforePermission.setVisibility(View.GONE);
+            lnAfterPermission.setVisibility(View.VISIBLE);
+        }
+    }
+    void RequestPermission(){
+        if ((getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) || (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED))
+        {
+            String[] permission = {Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE} ;
+            requestPermissions(permission,PERMISSION_CODE) ;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_CODE : {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    lnBeforePermission.setVisibility(View.GONE);
+                    lnAfterPermission.setVisibility(View.VISIBLE);
+//                    SetGallery() ;
+                }else {
+                    Toast.makeText(getActivity(),"Permission Denied",Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }
