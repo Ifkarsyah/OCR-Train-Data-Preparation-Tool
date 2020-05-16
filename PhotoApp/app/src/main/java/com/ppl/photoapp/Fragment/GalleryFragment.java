@@ -239,11 +239,12 @@ public class GalleryFragment extends Fragment {
                 return name.equals(Global.pixelWidth + "x" + Global.pixelHeight);
             }
         });
-        if (subFolderRoot.length == 0) {
+        if (subFolderRoot == null) {
             return folder;
-        } else {
+        } else if (subFolderRoot.length > 0){
             return subFolderRoot[0];
         }
+        return folder;
     }
 
     //Permission Widget
